@@ -1,0 +1,6 @@
+{
+    "java.project.referencedLibraries": [
+      "javalib/*.jar"
+    ] ,
+    "java.jdt.ls.java.home": "C:\\Program Files\\Eclipse Adoptium\\jdk-17.0.8.7-hotspot"
+  }
