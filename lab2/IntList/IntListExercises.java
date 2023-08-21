@@ -91,23 +91,17 @@ public class IntListExercises {
 //    }
     public static boolean squarePrimes(IntList lst) {
         // Base Case: we have reached the end of the list
-        boolean result = false;
-        if(lst.size()<=0){
+        if (lst == null) {
             return false;
         }
-        int len = lst.size();
-        for(int i= 0; i<len;i++){
-            if (lst == null) {
-                return false;
-            }
-            boolean currElemIsPrime = Primes.isPrime(lst.first);
-            if (currElemIsPrime) {
-                lst.first *= lst.first;
-                result = true;
-            }
-            lst = lst.rest;
+
+        boolean currElemIsPrime = Primes.isPrime(lst.first);
+
+        if (currElemIsPrime) {
+            lst.first *= lst.first;
         }
-        /*System.out.println(lst.toString());*/
-        return result;
+
+        return squarePrimes(lst.rest) || currElemIsPrime;
+//        return currElemIsPrime || squarePrimes(lst.rest);
     }
 }
