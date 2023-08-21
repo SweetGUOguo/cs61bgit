@@ -68,25 +68,46 @@ public class IntListExercises {
      * @param lst IntList from Lecture
      * @return True if there was an update to the list
      */
-    static boolean atleastOnePrimeflag = false;
+//    static boolean atleastOnePrimeflag = false;
+//    public static boolean squarePrimes(IntList lst) {
+//        // Base Case: we have reached the end of the list
+//
+//        if (lst == null) {
+//            return false;
+//        }
+//
+//        boolean currElemIsPrime = Primes.isPrime(lst.first);
+//
+//        if (currElemIsPrime) {
+//            atleastOnePrimeflag = true;
+//            lst.first *= lst.first;
+//        }
+//
+//        if (lst.rest == null) {
+//            return atleastOnePrimeflag;
+//        } else {
+//            return squarePrimes(lst.rest);
+//        }
+//    }
     public static boolean squarePrimes(IntList lst) {
         // Base Case: we have reached the end of the list
-
-        if (lst == null) {
+        boolean result = false;
+        if(lst.size()<=0){
             return false;
         }
-
-        boolean currElemIsPrime = Primes.isPrime(lst.first);
-
-        if (currElemIsPrime) {
-            atleastOnePrimeflag = true;
-            lst.first *= lst.first;
+        int len = lst.size();
+        for(int i= 0; i<len;i++){
+            if (lst == null) {
+                return false;
+            }
+            boolean currElemIsPrime = Primes.isPrime(lst.first);
+            if (currElemIsPrime) {
+                lst.first *= lst.first;
+                result = true;
+            }
+            lst = lst.rest;
         }
-
-        if (lst.rest == null) {
-            return atleastOnePrimeflag;
-        } else {
-            return squarePrimes(lst.rest);
-        }
+        /*System.out.println(lst.toString());*/
+        return result;
     }
 }
