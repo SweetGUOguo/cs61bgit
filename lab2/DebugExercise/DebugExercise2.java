@@ -71,7 +71,7 @@ public class DebugExercise2 {
         int i = 0;
         int sum = 0;
         while (i < x.length) {
-            sum = sum + add(sum, x[i]);
+            sum = sum + x[i];
             i = i + 1;
         }
         return sum;
