@@ -70,7 +70,6 @@ public class LinkedListDeque<Item> {
             }
             System.out.print('\n');
         }
-
     }
 
     /**
@@ -117,6 +116,22 @@ public class LinkedListDeque<Item> {
                 i++;
             }
             return nowget.item;
+        }
+    }
+
+    /**
+     * Same as get, but uses recursion.
+     */
+    public Item getRecursive(int index) {
+        StuffNode nowget = sentinel.next;
+        return get(nowget, index);
+    }
+
+    private Item get(StuffNode nowget, int index) {
+        if (index == 0) {
+            return nowget.item;
+        } else {
+            return get(nowget.next, index - 1);
         }
     }
 
