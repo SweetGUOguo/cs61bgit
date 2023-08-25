@@ -42,7 +42,7 @@ public class ArrayDeque<Item> {
         }
         items[nextfirst] = i;
         size = size + 1;
-        nextfirst = (nextfirst - 1) % items.length;
+        nextfirst = (nextfirst - 1+items.length) % items.length;
     }
 
     /**
@@ -56,12 +56,13 @@ public class ArrayDeque<Item> {
         size = size + 1;
         nextlast = (nextlast + 1) % items.length;
     }
+
     /**
      * Prints the items in the deque from first to last.
      */
     public void printDeque() {
-        if(!isEmpty()){
-            for(int i = (nextfirst+1)%items.length;i!=nextlast;i=(i+1)%items.length){
+        if (!isEmpty()) {
+            for (int i = (nextfirst + 1) % items.length; i != nextlast; i = (i + 1) % items.length) {
                 System.out.print(items[i]);
                 System.out.print(' ');
             }
@@ -92,8 +93,8 @@ public class ArrayDeque<Item> {
             return null;
         } else {
             Item delete = items[(nextlast - 1) % items.length];
-            items[(nextlast - 1) % items.length] = null;
-            nextlast = (nextlast - 1) % items.length;
+            items[(nextlast - 1+items.length) % items.length] = null;
+            nextlast = (nextlast - 1+items.length) % items.length;
             return delete;
         }
     }
