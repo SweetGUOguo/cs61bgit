@@ -93,7 +93,7 @@ public class ArrayDeque<Item> {
         if (isEmpty()) {
             return null;
         } else {
-            Item delete = items[(nextlast - 1) % items.length];
+            Item delete = items[(nextlast - 1 + items.length) % items.length];
             items[(nextlast - 1 + items.length) % items.length] = null;
             nextlast = (nextlast - 1 + items.length) % items.length;
             size = size - 1;
