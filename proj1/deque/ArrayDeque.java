@@ -42,7 +42,7 @@ public class ArrayDeque<Item> {
         }
         items[nextfirst] = i;
         size = size + 1;
-        nextfirst = (nextfirst - 1+items.length) % items.length;
+        nextfirst = (nextfirst - 1 + items.length) % items.length;
     }
 
     /**
@@ -81,6 +81,7 @@ public class ArrayDeque<Item> {
             Item delete = items[(nextfirst + 1) % items.length];
             items[(nextfirst + 1) % items.length] = null;
             nextfirst = (nextfirst + 1) % items.length;
+            size = size - 1;
             return delete;
         }
     }
@@ -93,8 +94,9 @@ public class ArrayDeque<Item> {
             return null;
         } else {
             Item delete = items[(nextlast - 1) % items.length];
-            items[(nextlast - 1+items.length) % items.length] = null;
-            nextlast = (nextlast - 1+items.length) % items.length;
+            items[(nextlast - 1 + items.length) % items.length] = null;
+            nextlast = (nextlast - 1 + items.length) % items.length;
+            size = size - 1;
             return delete;
         }
     }
