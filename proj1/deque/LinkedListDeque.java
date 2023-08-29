@@ -1,6 +1,6 @@
 package deque;
 
-public class LinkedListDeque<Item> {
+public class LinkedListDeque<Item> implements Deque<Item> {
     private StuffNode sentinel;
     private int size;
 
@@ -20,7 +20,7 @@ public class LinkedListDeque<Item> {
         sentinel.next = new StuffNode(i, sentinel, sentinel);
         size = 1;
     }
-
+    @Override
     /**
      * Adds x to the front of the list.
      */
@@ -29,7 +29,7 @@ public class LinkedListDeque<Item> {
         sentinel.next = sentinel.next.prev;
         size = size + 1;
     }
-
+    @Override
     /**
      * Adds x to the end of the list.
      */
@@ -38,25 +38,25 @@ public class LinkedListDeque<Item> {
         sentinel.prev = sentinel.prev.next;
         size = size + 1;
     }
-
-    /**
+    /*@Override
+    *//**
      * Judge if the deque is empty.
-     */
+     *//*
     public boolean isEmpty() {
         if (size == 0) {
             return true;
         } else {
             return false;
         }
-    }
-
+    }*/
+    @Override
     /**
      * Returns the number of items in the deque.
      */
     public int size() {
         return size;
     }
-
+    @Override
     /**
      * Prints the items in the deque from first to last.
      */
@@ -71,7 +71,7 @@ public class LinkedListDeque<Item> {
             System.out.print('\n');
         }
     }
-
+    @Override
     /**
      * Removes the first item from the front of the list.
      */
@@ -86,7 +86,7 @@ public class LinkedListDeque<Item> {
             return nowitem;
         }
     }
-
+    @Override
     /**
      * Removes the first item from the end of the list.
      */
@@ -101,7 +101,7 @@ public class LinkedListDeque<Item> {
             return nowitem;
         }
     }
-
+    @Override
     /**
      * Gets the item at the given index.
      */
