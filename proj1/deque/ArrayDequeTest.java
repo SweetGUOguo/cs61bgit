@@ -29,7 +29,7 @@ public class ArrayDequeTest {
 
         lld1.addLast("middle");
         assertEquals(2, lld1.size());
-        assertEquals("middle", lld1.get(0));
+        assertEquals("middle", lld1.get(1));
 
         lld1.addLast("back");
         assertEquals(3, lld1.size());
