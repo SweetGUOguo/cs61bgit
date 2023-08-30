@@ -1,8 +1,4 @@
 package deque;
-
-//import java.util.Iterator;
-
-//public class ArrayDeque<T> implements Iterable<Item> {
 public class ArrayDeque<T> implements Deque<T> {
     private int nextfirst;
     private int nextlast;
@@ -15,18 +11,6 @@ public class ArrayDeque<T> implements Deque<T> {
         nextfirst = 0;
         nextlast = 0;
     }
-    /*@Override
-    *//**
-     * Judge if the deque is empty.
-     *//*
-    public boolean isEmpty() {
-        if (size == 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }*/
-
     /**
      * Resizes the underlying array to the target capacity.
      */
@@ -145,18 +129,4 @@ public class ArrayDeque<T> implements Deque<T> {
     public T get(int index) {
         return items[index];
     }
-
-//    public Iterator<Item> iterator(){
-//        return DequeIterator();
-//    }
-//
-//    private class DequeIterator implements Iterator<Item> {
-//        // 实现迭代器的相关方法
-//        // ...
-//    }
-//
-//    public boolean equals(Object o){
-//
-//    }
-
 }
