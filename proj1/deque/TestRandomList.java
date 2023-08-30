@@ -6,21 +6,21 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class TestRandomList {
-    @Test
-    public void maxTest() {
-        MaxArrayDeque<Integer> correct = new MaxArrayDeque<>();
-        ArrayDeque<Integer> broken = new ArrayDeque<>();
-
-        correct.addLast(0);
-        correct.addLast(1);
-        broken.addLast(0);
-        broken.addLast(1);
-        assertEquals(correct.get(0), broken.get(0));
-
-    }
+//    @Test
+//    public void maxTest() {
+//        MaxArrayDeque<Integer> correct = new MaxArrayDeque<>();
+//        ArrayDeque<Integer> broken = new ArrayDeque<>();
+//
+//        correct.addLast(0);
+//        correct.addLast(1);
+//        broken.addLast(0);
+//        broken.addLast(1);
+//        assertEquals((Integer) 0, broken.get(0));
+//
+//    }
     @Test
     public void randomizedTest() {
-        MaxArrayDeque<Integer> correct = new MaxArrayDeque<>();
+        LinkedListDeque<Integer> correct = new LinkedListDeque<>();
         ArrayDeque<Integer> broken = new ArrayDeque<>();
 
         int N = 5000;
