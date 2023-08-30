@@ -138,15 +138,12 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
 
     protected class ArrayDequeIterator implements Iterator<T> {
         private int index;
-
         ArrayDequeIterator() {
             index = 0;
         }
-
         public boolean hasNext() {
             return index < size;
         }
-
         public T next() {
             T item = get(index);
             index += 1;
