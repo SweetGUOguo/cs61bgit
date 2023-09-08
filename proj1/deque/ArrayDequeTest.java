@@ -43,23 +43,64 @@ public class ArrayDequeTest {
     public void addRemoveTest() {
 
 //        System.out.println("Make sure to uncomment the lines below (and delete this print statement).");
-        ArrayDeque<String> lld1 = new ArrayDeque<String>();
+        ArrayDeque<Integer> lld1 = new ArrayDeque<Integer>();
         // should be empty
         assertTrue("lld1 should be empty upon initialization", lld1.isEmpty());
 
-        lld1.addFirst("10");
-        lld1.addFirst("10");
-        lld1.addFirst("10");
-        lld1.addFirst("10");
-        lld1.addFirst("10");
+        lld1.addFirst(10);
+        lld1.addFirst(10);
+        lld1.addFirst(10);
+        lld1.addFirst(10);
+        lld1.addFirst(10);
+        lld1.addFirst(10);
+        lld1.addFirst(10);
+        lld1.addFirst(10);
+        lld1.addFirst(10);
+        lld1.addFirst(10);
+        lld1.addFirst(10);
+        lld1.addFirst(10);
+        lld1.addFirst(10);
+        lld1.addFirst(10);
+        lld1.addFirst(10);
         // should not be empty
         assertFalse("lld1 should contain 1 item", lld1.isEmpty());
 
-        lld1.removeFirst();
-        // should be empty
-        lld1.removeFirst();
-        lld1.removeFirst();
-        assertEquals(2, lld1.size());
+//        lld1.removeLast();
+//        // should be empty
+//        lld1.removeLast();
+//        lld1.removeLast();
+        lld1.removeLast();
+        lld1.removeLast();
+        lld1.removeLast();
+        lld1.removeLast();
+        lld1.removeLast();
+        lld1.removeLast();
+        lld1.removeLast();
+        lld1.removeLast();
+        lld1.removeLast();
+        lld1.removeLast();
+        lld1.removeLast();
+        lld1.removeLast();
+        lld1.removeLast();
+        lld1.removeLast();
+        lld1.removeLast();
+        assertEquals((Integer) 10, lld1.removeLast());
+        assertEquals((Integer) 10, lld1.removeLast());
+        assertEquals((Integer) 10, lld1.removeLast());
+        assertEquals((Integer) 10, lld1.removeLast());
+        assertEquals((Integer) 10, lld1.removeLast());
+        assertEquals((Integer) 10, lld1.removeLast());
+        assertEquals((Integer) 10, lld1.removeLast());
+        assertEquals((Integer) 10, lld1.removeLast());
+        assertEquals((Integer) 10, lld1.removeLast());
+        assertEquals((Integer) 10, lld1.removeLast());
+        assertEquals((Integer) 10, lld1.removeLast());
+        assertEquals((Integer) 10, lld1.removeLast());
+        assertEquals((Integer) 10, lld1.removeLast());
+        assertEquals((Integer) 10, lld1.removeLast());
+        assertEquals((Integer) 10, lld1.removeLast());
+        assertEquals(null, lld1.removeLast());
+//        assertEquals(2, lld1.size());
 //        assertTrue("lld1 should be empty after removal", lld1.isEmpty());
     }
 

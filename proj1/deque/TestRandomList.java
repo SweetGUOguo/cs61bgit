@@ -32,24 +32,26 @@ public class TestRandomList {
 //                System.out.println("length"+ broken.size() +"array firsr and next(" + broken.nextfirst + ")" + broken.nextlast);
                 correct.addLast(randVal);
                 broken.addLast(randVal);
-
+                System.out.println("000000000000000000000000");
                 System.out.println("addLast(" + randVal + ")");
             } else if (operationNumber == 1) {
                 // size
                 int size = correct.size();
+                System.out.println("1111111111111111111111111");
                 System.out.println("size: " + size);
                 assertEquals(correct.size(), broken.size());
             } else if (operationNumber == 2) {
                 if (correct.size() > 0) {
                     correct.get(1);
 //                    System.out.println("Last: " + correct.get(1));
-                    assertEquals(correct.get(1), broken.get(1));
+                    assertEquals(correct.get(correct.size()-1), broken.get(correct.size()-1));
                 } else {
                     continue;
                 }
             } else if (operationNumber == 3) {
                 if (correct.size() > 0) {
-                    System.out.println("newLast: " + correct.size() + " " + broken.size());
+                    System.out.println("3333333333333333333333333333333333333");
+                    System.out.println("newLast: correctsize" + correct.size() + " brokensize" + broken.size());
                     assertEquals(correct.removeLast(), broken.removeLast());
                 } else {
                     continue;
