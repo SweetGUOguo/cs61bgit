@@ -3,10 +3,10 @@ package deque;
 import java.util.Iterator;
 
 public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
-    private int nextfirst=0;
-    private int nextlast=0;
+    private int nextfirst = 0;
+    private int nextlast = 0;
     private T[] items;
-    private int size=0;
+    private int size = 0;
 
     public ArrayDeque() {
         items = (T[]) new Object[8];
@@ -17,14 +17,23 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
      */
     private void resize(int capacity) {
         T[] a = (T[]) new Object[capacity];
+        int srcpos;
+        int destpos;
+        int copylength;
         if ((nextfirst + 1) % items.length <= (nextlast - 1 + items.length) % items.length) {
-            int i = (nextfirst + 1) % items.length;
-
-//            System.arraycopy(items, (nextfirst + 1) % items.length, a, 0, size);
-            System.arraycopy(items, i, a, 0, size);
+            srcpos = (nextfirst + 1) % items.length;
+            destpos = 0;
+            copylength = size;
+            System.arraycopy(items, srcpos, a, destpos, copylength);
         } else {
-            System.arraycopy(items, (nextfirst + 1) % items.length, a, 0, items.length - nextfirst - 1);
-            System.arraycopy(items, 0, a, items.length - nextfirst - 1, nextfirst + 1);
+            srcpos = (nextfirst + 1) % items.length;
+            destpos = 0;
+            copylength = items.length - nextfirst - 1;
+            System.arraycopy(items, srcpos, a, destpos, copylength);
+            srcpos = 0;
+            destpos = items.length - nextfirst - 1;
+            copylength = nextfirst + 1;
+            System.arraycopy(items, srcpos, a, destpos, copylength);
         }
         items = a;
         nextfirst = a.length - 1;
@@ -70,7 +79,8 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
      */
     public void printDeque() {
         if (!isEmpty()) {
-            for (int i = (nextfirst + 1) % items.length; i != nextlast; i = (i + 1) % items.length) {
+            int i;
+            for (i = (nextfirst + 1) % items.length; i != nextlast; i = (i + 1) % items.length) {
                 System.out.print(items[i] + " ");
             }
             System.out.print('\n');
@@ -155,7 +165,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
                 return false;
             } else {
                 for (int i = 0; i < this.size(); i++) {
-                    if (o.get(i) != this.get(i)) {
+                    if (!o.get(i).equals(this.get(i))) {
                         return false;
                     }
                 }
