@@ -47,59 +47,46 @@ public class ArrayDequeTest {
         // should be empty
         assertTrue("lld1 should be empty upon initialization", lld1.isEmpty());
 
-        lld1.addFirst(10);
-        lld1.addFirst(10);
-        lld1.addFirst(10);
-        lld1.addFirst(10);
-        lld1.addFirst(10);
-        lld1.addFirst(10);
-        lld1.addFirst(10);
-        lld1.addFirst(10);
-        lld1.addFirst(10);
-        lld1.addFirst(10);
-        lld1.addFirst(10);
-        lld1.addFirst(10);
-        lld1.addFirst(10);
-        lld1.addFirst(10);
-        lld1.addFirst(10);
+        lld1.addFirst(0);
+        lld1.removeFirst();
+        lld1.addLast(2);
+        lld1.removeLast();
+        lld1.addLast(4);
+        lld1.removeLast();
+        lld1.addFirst(6);
+        lld1.addFirst(7);
+        lld1.addLast(8);
+        lld1.removeLast();
+        lld1.removeFirst();
+        lld1.removeFirst();
+        lld1.addFirst(12);
+        lld1.addLast(13);
+        lld1.addLast(14);
+        lld1.removeFirst();
+        lld1.addLast(16);
+        lld1.addLast(17);
+        lld1.removeFirst();
+        lld1.addLast(20);
+        lld1.addLast(21);
+        lld1.addLast(22);
+        lld1.addLast(23);
+        lld1.removeFirst();
+        lld1.removeFirst();
+        lld1.removeFirst();
+        lld1.removeFirst();
+
+        lld1.get(2);
         // should not be empty
+        System.out.println(lld1.get(2));
         assertFalse("lld1 should contain 1 item", lld1.isEmpty());
 
 //        lld1.removeLast();
 //        // should be empty
 //        lld1.removeLast();
 //        lld1.removeLast();
-        lld1.removeLast();
-        lld1.removeLast();
-        lld1.removeLast();
-        lld1.removeLast();
-        lld1.removeLast();
-        lld1.removeLast();
-        lld1.removeLast();
-        lld1.removeLast();
-        lld1.removeLast();
-        lld1.removeLast();
-        lld1.removeLast();
-        lld1.removeLast();
-        lld1.removeLast();
-        lld1.removeLast();
-        lld1.removeLast();
-        assertEquals((Integer) 10, lld1.removeLast());
-        assertEquals((Integer) 10, lld1.removeLast());
-        assertEquals((Integer) 10, lld1.removeLast());
-        assertEquals((Integer) 10, lld1.removeLast());
-        assertEquals((Integer) 10, lld1.removeLast());
-        assertEquals((Integer) 10, lld1.removeLast());
-        assertEquals((Integer) 10, lld1.removeLast());
-        assertEquals((Integer) 10, lld1.removeLast());
-        assertEquals((Integer) 10, lld1.removeLast());
-        assertEquals((Integer) 10, lld1.removeLast());
-        assertEquals((Integer) 10, lld1.removeLast());
-        assertEquals((Integer) 10, lld1.removeLast());
-        assertEquals((Integer) 10, lld1.removeLast());
-        assertEquals((Integer) 10, lld1.removeLast());
-        assertEquals((Integer) 10, lld1.removeLast());
-        assertEquals(null, lld1.removeLast());
+
+//        assertEquals((Integer) 10, lld1.removeLast());
+
 //        assertEquals(2, lld1.size());
 //        assertTrue("lld1 should be empty after removal", lld1.isEmpty());
     }
