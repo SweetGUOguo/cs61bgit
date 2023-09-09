@@ -3,16 +3,13 @@ package deque;
 import java.util.Iterator;
 
 public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
-    private int nextfirst;
-    private int nextlast;
+    private int nextfirst=0;
+    private int nextlast=0;
     private T[] items;
-    private int size;
+    private int size=0;
 
     public ArrayDeque() {
         items = (T[]) new Object[8];
-        size = 0;
-        nextfirst = 0;
-        nextlast = 0;
     }
 
     /**
@@ -74,8 +71,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     public void printDeque() {
         if (!isEmpty()) {
             for (int i = (nextfirst + 1) % items.length; i != nextlast; i = (i + 1) % items.length) {
-                System.out.print(items[i]);
-                System.out.print(' ');
+                System.out.print(items[i] + " ");
             }
             System.out.print('\n');
         }

@@ -4,7 +4,7 @@ import java.util.Iterator;
 
 public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
     private StuffNode sentinel;
-    private int size;
+    private int size = 0;
 
     /**
      * Creates an empty linked list deque.
@@ -13,7 +13,6 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
         sentinel = new StuffNode(null, null, null);
         sentinel.next = sentinel;
         sentinel.prev = sentinel;
-        size = 0;
     }
 
     @Override
@@ -35,19 +34,6 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
         sentinel.prev = sentinel.prev.next;
         size = size + 1;
     }
-    /*@Override
-     */
-
-    /**
-     * Judge if the deque is empty.
-     *//*
-    public boolean isEmpty() {
-        if (size == 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }*/
     @Override
     /**
      * Returns the number of items in the deque.
@@ -152,14 +138,13 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
             Deque<T> o = (Deque<T>) other;
             if (o.size() != this.size()) {
                 return false;
-            } else {
-                for (int i = 0; i < this.size(); i++) {
-                    if (o.get(i) != this.get(i)) {
-                        return false;
-                    }
-                }
-                return true;
             }
+            for (int i = 0; i < this.size(); i++) {
+                if (o.get(i) != this.get(i)) {
+                    return false;
+                }
+            }
+            return true;
         }
         return false;
     }
@@ -169,11 +154,11 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
     }
 
     private class StuffNode {
-        public StuffNode prev;
-        public T item;
-        public StuffNode next;
+        private StuffNode prev;
+        private T item;
+        private StuffNode next;
 
-        public StuffNode(T i, StuffNode p, StuffNode n) {
+        private StuffNode(T i, StuffNode p, StuffNode n) {
             item = i;
             prev = p;
             next = n;
