@@ -24,7 +24,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
             System.arraycopy(items, i, a, 0, size);
         } else {
             System.arraycopy(items, (nextfirst + 1) % items.length, a, 0, items.length - nextfirst - 1);
-            System.arraycopy(items, 0, a, items.length - nextfirst - 1, nextfirst);
+            System.arraycopy(items, 0, a, items.length - nextfirst - 1, nextfirst+1);
         }
         items = a;
         nextfirst = a.length - 1;
