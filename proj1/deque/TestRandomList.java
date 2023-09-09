@@ -4,6 +4,7 @@ import edu.princeton.cs.algs4.StdRandom;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class TestRandomList {
 //    @Test
@@ -25,7 +26,7 @@ public class TestRandomList {
 
         int N = 5000;
         for (int i = 0; i < N; i += 1) {
-            int operationNumber = StdRandom.uniform(0, 4);
+            int operationNumber = StdRandom.uniform(0, 5);
             if (operationNumber == 0) {
                 // addLast
                 int randVal = StdRandom.uniform(0, 100);
@@ -41,7 +42,7 @@ public class TestRandomList {
                 System.out.println("size: " + size);
                 assertEquals(correct.size(), broken.size());
             } else if (operationNumber == 2) {
-                if (correct.size() > 0) {
+                if (!correct.isEmpty()) {
                     correct.get(1);
 //                    System.out.println("Last: " + correct.get(1));
                     assertEquals(correct.get(correct.size()-1), broken.get(correct.size()-1));
@@ -49,13 +50,17 @@ public class TestRandomList {
                     continue;
                 }
             } else if (operationNumber == 3) {
-                if (correct.size() > 0) {
+                if (!correct.isEmpty()) {
                     System.out.println("3333333333333333333333333333333333333");
                     System.out.println("newLast: correctsize" + correct.size() + " brokensize" + broken.size());
                     assertEquals(correct.removeLast(), broken.removeLast());
                 } else {
                     continue;
                 }
+            }else if (operationNumber == 4){
+                System.out.println("444444444444444444444444");
+                assertTrue(correct.equals(broken));
+
             }
             /*compare*/
             assertEquals(correct.size(), broken.size());
