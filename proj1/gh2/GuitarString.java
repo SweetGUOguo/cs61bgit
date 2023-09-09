@@ -1,4 +1,5 @@
 package gh2;
+
 import deque.Deque;
 import deque.LinkedListDeque;
 
@@ -37,7 +38,7 @@ public class GuitarString {
     public void tic() {
         double first = buffer.removeFirst();
         double second = buffer.get(0);
-        double newone = DECAY*1/2*(first+second);
+        double newone = DECAY * 1 / 2 * (first + second);
         buffer.addLast(newone);
     }
 

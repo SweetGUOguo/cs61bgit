@@ -1,4 +1,5 @@
 package deque;
+
 import java.util.Iterator;
 
 public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
@@ -140,20 +141,20 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
     /**
      * equals
      */
-    public boolean equals(Object other){
-        if(this == other){
+    public boolean equals(Object other) {
+        if (this == other) {
             return true;
         }
         if (other == null) {
             return false;
         }
-        if(other instanceof Deque){
+        if (other instanceof Deque) {
             Deque<T> o = (Deque<T>) other;
-            if(o.size()!=this.size()){
+            if (o.size() != this.size()) {
                 return false;
-            }else{
-                for(int i = 0;i<this.size();i++){
-                    if(o.get(i)!=this.get(i)){
+            } else {
+                for (int i = 0; i < this.size(); i++) {
+                    if (o.get(i) != this.get(i)) {
                         return false;
                     }
                 }
@@ -162,6 +163,7 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
         }
         return false;
     }
+
     public Iterator<T> iterator() {
         return new LinkedListDequeIterator();
     }
