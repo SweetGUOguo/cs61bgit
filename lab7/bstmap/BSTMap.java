@@ -8,8 +8,21 @@ import java.util.Set;
 //import java.util.Comparable;
 
 public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
-    int size = 0;
+    private int size = 0;
 
+    public void printInOrder() {
+        if (map != null) {
+            printInOrderHelper(map);
+        }
+    }
+
+    private void printInOrderHelper(Entry node) {
+        if (node != null) {
+            printInOrderHelper(node.leftn);
+            System.out.println(node.key);
+            printInOrderHelper(node.rightn);
+        }
+    }
     @Override
     public void clear() {
         map = null;
