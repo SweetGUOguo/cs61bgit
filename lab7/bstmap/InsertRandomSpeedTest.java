@@ -24,11 +24,12 @@ public class InsertRandomSpeedTest {
                            + "as <String, Integer> pairs.");
         System.out.print("Please enter desired length of each string: ");
         int L = waitForPositiveInt(input);
-
+//        int L = 2;
         String repeat = "y";
         do {
             System.out.print("\nEnter # strings to insert into the maps: ");
             int N = waitForPositiveInt(input);
+//            int N = 100;
             timeRandomMap61B(new ULLMap<>(), N, L);
             timeRandomMap61B(new BSTMap<>(), N, L);
             timeRandomTreeMap(new TreeMap<>(), N, L);
@@ -36,6 +37,7 @@ public class InsertRandomSpeedTest {
 
             System.out.print("Would you like to try more timed-tests? (y/n)");
             repeat = input.nextLine();
+//            repeat = "y";
         } while (!repeat.equalsIgnoreCase("n") && !repeat.equalsIgnoreCase("no"));
         input.close();
     }
