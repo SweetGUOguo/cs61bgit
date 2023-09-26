@@ -146,7 +146,19 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      * UnsupportedOperationException.
      */
     public V remove(K key) {
-        throw new UnsupportedOperationException();
+        int index = Math.floorMod(key.hashCode(), buckets.length);
+        Collection<Node> bucket = buckets[index];
+        if (bucket != null) {
+            for (Node node : bucket) {
+                if (node.key.equals(key)) {
+                    V tmpv = node.value;
+                    bucket.remove(node);
+                    return tmpv;
+                }
+            }
+        }
+        return null;
+//        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -156,7 +168,19 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      * throw an UnsupportedOperationException.
      */
     public V remove(K key, V value) {
-        throw new UnsupportedOperationException();
+        int index = Math.floorMod(key.hashCode(), buckets.length);
+        Collection<Node> bucket = buckets[index];
+        if (bucket != null) {
+            for (Node node : bucket) {
+                if (node.key.equals(key) && node.value.equals(value)) {
+                    V tmpv = node.value;
+                    bucket.remove(node);
+                    return tmpv;
+                }
+            }
+        }
+        return null;
+//        throw new UnsupportedOperationException();
     }
 
     // You should probably define some more!
