@@ -1,10 +1,14 @@
 # Gitlet Design Document
 
-**Name**:
+**Name**:Gguo
 
 ## Classes and Data Structures
 
-### Class 1
+### Commit
+#### Instance Variables
+* Message - contains the message of a commit.
+* Timestamp - time at which a commit was created. Assigned by the constructor.
+* Parent - the parent commit of a commit object.
 
 #### Fields
 
@@ -23,4 +27,3 @@
 ## Algorithms
 
 ## Persistence
-
