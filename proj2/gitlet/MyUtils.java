@@ -4,19 +4,24 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
+import java.util.function.Supplier;
 
 import static gitlet.Repository.*;
 import static gitlet.Utils.*;
 
 public class MyUtils {
-    public static <T extends Serializable> void getObjectById(String id, Class<T> classobject){
-        File aimDIR = join(Objects_DIR, makeSha2DIR(id));
-        aimDIR.mkdir();
-        File aimFile = join(aimDIR, makeShaFile(id));
-        readObject(aimFile,classobject);
+    //    public static <T extends Serializable> void getObjectById(String id, Class<T> classobject){
+//        File aimDIR = join(Objects_DIR, makeSha2DIR(id));
+//        aimDIR.mkdir();
+//        File aimFile = join(aimDIR, makeShaFile(id));
+//        readObject(aimFile,classobject);
+//    }
+
+    public static <T> Lazy<T> lazy(Supplier<T> delegate){
+        return new Lazy<>(delegate);
     }
     public static File getObjectfileById(String id) {
-        File Objectfile = join(Objects_DIR, id);
+        File Objectfile = join(Objects_DIR, makeSha2DIR(id), makeShaFile(id));
         return Objectfile;
     }
 

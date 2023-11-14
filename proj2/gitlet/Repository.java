@@ -2,6 +2,7 @@ package gitlet;
 
 import java.io.File;
 import static gitlet.Utils.*;
+import static gitlet.MyUtils.*;
 
 // TODO: any imports you need here
 
@@ -26,32 +27,103 @@ public class Repository {
     public static final File GITLET_DIR = join(CWD, ".gitlet");
     public static final File Objects_DIR = join(GITLET_DIR,"objects");
     public static final File Refs_DIR = join(GITLET_DIR,"refs");
-    public static final File HEAD_DIR = join(GITLET_DIR,"HEAD");
-    public static final File Staging_DIR = join(GITLET_DIR,"staging");
-    public static final File RemovedStage_DIR = join(GITLET_DIR,"removedStage");
+    public static final File HEAD = join(GITLET_DIR,"HEAD");
     /*Make a file named index*/
     public static final File index = join(GITLET_DIR,"index");
     /* TODO: fill in the rest of this class. */
     /* init */
-    public static void initRepository(){
-        /*Make Big Dir*/
-        GITLET_DIR.mkdir();
-        Objects_DIR.mkdir();
-        Refs_DIR.mkdir();
-        HEAD_DIR.mkdir();
-        Staging_DIR.mkdir();
-        RemovedStage_DIR.mkdir();
-        /*Set init commit object*/
-        Commit initcommit = new Commit("initial commit",null);
 
-        initcommit.saveCommit();
+
+    private final Lazy<staging> stagingArea = lazy(() -> {
+        /*check if index exist*/
+        staging s = index.exists()
+                ? staging.fromFile()
+                : new staging();
+        s.setTrackedTree();
+        return s;
+    });
+
+    public static void initRepository(){
+        if(!GITLET_DIR.exists()){
+            /*Make Big Dir*/
+            GITLET_DIR.mkdir();
+            Objects_DIR.mkdir();
+            Refs_DIR.mkdir();
+//        HEAD_DIR.mkdir();
+            /*Set init commit object*/
+            Commit initcommit = new Commit("initial commit");
+            initcommit.saveCommit();
+        }else{
+            System.out.println("A Gitlet version-control system already exists in the current directory.");
+        }
     }
 
-    /*produce a tree*/
-    public static void buildTree(File filename, Blob addblob){
-        String nameString = filename.getPath();
-        Tree newtree = new Tree(nameString, addblob);
-        newtree.saveTree();
+    public static boolean checkGit(){
+        if(GITLET_DIR.exists()){
+            return true;
+        }
+        System.out.println("Not init yet.");
+        return false;
+    }
+
+    public void add(File addFile){
+        if(addFile.exists()){
+            if(stagingArea.get().addstage(addFile)){
+                stagingArea.get().save();
+            }
+        }else{
+            System.out.println("File does not exist.");
+        }
+    }
+
+    public void commit(String message){
+        if(!stagingArea.get().isClear()){
+            String lastSha = readContentsAsString(HEAD);
+            Commit nowCommit = new Commit(lastSha, message);
+            nowCommit.addToTrack(stagingArea.get().getAdd());
+            nowCommit.rmToTrack(stagingArea.get().getRemove());
+//        /* TODO: SET TREE */
+            stagingArea.get().clear();
+            stagingArea.get().save();
+            nowCommit.saveCommit();
+        }else {
+            System.out.println("No changes added to the commit.");
+        }
+    }
+
+
+    public static void checkout(File file){
+        String fileName = file.getPath();
+        String lastCommitSha = readContentsAsString(HEAD);
+        Commit checkoutCommit = Commit.readCommit(lastCommitSha);
+        String blobSHA = checkoutCommit.getTrackTree().get(fileName);
+//        Blob checkoutBlob = new Blob(blobSHA);
+//        Blob checkoutBlob = readObject(getObjectfileById(blobSHA), Blob.class);
+        Blob checkoutBlob = Blob.readBlob(blobSHA);
+        byte[] content = checkoutBlob.getContent();
+        writeContents(file, content);
+    }
+    public static void checkout(String SHA, File file){
+        String fileName = file.getPath();
+        Commit checkoutCommit = Commit.readCommit(SHA);
+        String blobSHA = checkoutCommit.getTrackTree().get(fileName);
+        Blob checkoutBlob = Blob.readBlob(blobSHA);
+        byte[] content = checkoutBlob.getContent();
+        writeContents(file, content);
+    }
+    public static void log(){
+        String headCommitID = readContentsAsString(HEAD);
+        Commit.printLog(headCommitID);
+    }
+
+    public void rm(File rmFile){
+        if(rmFile.exists()){
+            if(stagingArea.get().rmstage(rmFile)){
+                stagingArea.get().save();
+            }
+        }else{
+            System.out.println("File does not exist.");
+        }
     }
 
 }
