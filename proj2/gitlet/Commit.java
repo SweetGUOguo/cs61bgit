@@ -66,7 +66,7 @@ public class Commit implements Serializable, Dumpable {
         System.out.println("===");
         System.out.println("commit "+logCommit.commitID);
         System.out.println("Date: "+logCommit.timestamp);
-        System.out.println(logCommit.message);
+        System.out.println(logCommit.message+'\n');
         if(logCommit.parentCommit!=null){
             printLog(logCommit.parentCommit);
         }
