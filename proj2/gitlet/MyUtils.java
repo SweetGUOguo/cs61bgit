@@ -1,10 +1,10 @@
 package gitlet;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.ObjectInputStream;
-import java.io.Serializable;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Supplier;
+
 
 import static gitlet.Repository.*;
 import static gitlet.Utils.*;
@@ -40,5 +40,46 @@ public class MyUtils {
     private static String makeShaFile(String SHA) {
         String shaFilename = SHA.substring(2);
         return shaFilename;
+    }
+
+    /**
+     * get all the files in a dir
+     * all the dir in dir*/
+    public static List<String> traverseFolder(File folder){
+        List<String> fileList = new ArrayList<>();
+
+        if(folder.isDirectory()){
+            File[] files = folder.listFiles();
+            if(files!=null){
+                for(File file:files){
+                    if(file.isDirectory()){
+                        fileList.addAll(traverseFolder(file));
+                    }else{
+                        fileList.add(file.getPath());
+                    }
+                }
+            }
+        }
+        return fileList;
+    }
+    /**
+     * Check if the file contain the Commit.class
+     * */
+    public static boolean ifObjectisCommit(File file){
+        try {
+            ObjectInputStream in = new ObjectInputStream(new FileInputStream(file));
+            Object obj = in.readObject();
+            in.close();
+
+            if (obj instanceof Commit) {
+                return true;
+            } else if (obj instanceof Blob) {
+                return false;
+            } else {
+                return false;
+            }
+        } catch (IOException | ClassNotFoundException excp) {
+            throw new IllegalArgumentException(excp.getMessage());
+        }
     }
 }

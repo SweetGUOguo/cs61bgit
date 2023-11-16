@@ -31,7 +31,7 @@ public class Main {
                 break;
             case "add":
                 // TODO: handle the `add [filename]` command
-                if(!Repository.checkGit()){
+                if (!Repository.checkGit()) {
                     break;
                 }
                 File addFile = join(CWD, args[1]);
@@ -39,27 +39,27 @@ public class Main {
                 break;
             // TODO: FILL THE REST IN
             case "commit":
-                if(!Repository.checkGit()){
+                if (!Repository.checkGit()) {
                     break;
                 }
-                if(args.length == 1){
+                if (args.length == 1) {
                     System.out.println("Please enter a commit message.");
-                }else{
+                } else {
                     new Repository().commit(args[1]);
                 }
                 break;
             case "rm":
-                if(!Repository.checkGit()){
+                if (!Repository.checkGit()) {
                     break;
                 }
                 File rmFile = join(CWD, args[1]);
                 new Repository().rm(rmFile);
                 break;
             case "checkout":
-                if(!Repository.checkGit()){
+                if (!Repository.checkGit()) {
                     break;
                 }
-                switch(args.length){
+                switch (args.length) {
                     case 2:
                         break;
                     case 3:
@@ -85,13 +85,27 @@ public class Main {
 //                checkout(args[1],checkoutFile);
 //                break;
             case "log":
-                if(!Repository.checkGit()){
+                if (!Repository.checkGit()) {
                     break;
                 }
                 log();
                 break;
-
-
+            case "global-log":
+                if (!Repository.checkGit()) {
+                    break;
+                }
+                globalLog();
+                break;
+            case "find":
+                if (!Repository.checkGit()) {
+                    break;
+                }
+                if (args.length == 1) {
+                    System.out.println("Please enter a commit message.");
+                } else {
+                    new Repository().find(args[1]);
+                }
+                break;
         }
     }
 }

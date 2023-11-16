@@ -2,6 +2,7 @@ package gitlet;
 
 // TODO: any imports you need here
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.*;
 
@@ -70,6 +71,42 @@ public class Commit implements Serializable, Dumpable {
         if(logCommit.parentCommit!=null){
             printLog(logCommit.parentCommit);
         }
+    }
+
+    public static void printGloballog(){
+//        StringBuilder commitlog = new StringBuilder();
+        List<String> filenames = traverseFolder(Objects_DIR);
+        for(String filename:filenames){
+            File file = new File(filename);
+            if(MyUtils.ifObjectisCommit(file)){
+                Commit ifCommit = readObject(file, Commit.class);
+                if (ifCommit.commitID!=null){
+//                    Commit logCommit = readCommit(ifCommit.commitID);
+                    System.out.println("===");
+                    System.out.println("commit "+ifCommit.commitID);
+                    System.out.println("Date: "+ifCommit.timestamp);
+                    System.out.println(ifCommit.message+'\n');
+                }
+            }
+        }
+    }
+
+    public static StringBuilder findCommitbyMessage(String message){
+        StringBuilder commitIds = new StringBuilder();
+        List<String> filenames = traverseFolder(Objects_DIR);
+        for(String filename:filenames){
+            File file = new File(filename);
+            if(MyUtils.ifObjectisCommit(file)){
+                Commit ifCommit = readObject(file, Commit.class);
+                if (ifCommit.commitID!=null){
+                    if(ifCommit.getMessage().equals(message)){
+                        commitIds.append(ifCommit.commitID);
+                        commitIds.append('\n');
+                    }
+                }
+            }
+        }
+        return commitIds;
     }
 
     public String getMessage() {

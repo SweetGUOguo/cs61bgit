@@ -26,6 +26,8 @@ public class Repository {
     /** The .gitlet directory. */
     public static final File GITLET_DIR = join(CWD, ".gitlet");
     public static final File Objects_DIR = join(GITLET_DIR,"objects");
+    public static final File Blobs_DIR = join(Objects_DIR,"blobs");
+    public static final File Commits_DIR = join(Objects_DIR,"commits");
     public static final File Refs_DIR = join(GITLET_DIR,"refs");
     public static final File HEAD = join(GITLET_DIR,"HEAD");
     /*Make a file named index*/
@@ -48,6 +50,8 @@ public class Repository {
             /*Make Big Dir*/
             GITLET_DIR.mkdir();
             Objects_DIR.mkdir();
+            Blobs_DIR.mkdir();
+            Commits_DIR.mkdir();
             Refs_DIR.mkdir();
 //        HEAD_DIR.mkdir();
             /*Set init commit object*/
@@ -114,6 +118,14 @@ public class Repository {
     public static void log(){
         String headCommitID = readContentsAsString(HEAD);
         Commit.printLog(headCommitID);
+    }
+    public static void globalLog(){
+        Commit.printGloballog();
+    }
+
+    public static void find(String message){
+        StringBuilder CommitIds = Commit.findCommitbyMessage(message);
+        System.out.print(CommitIds);
     }
 
     public void rm(File rmFile){
