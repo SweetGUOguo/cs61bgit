@@ -48,7 +48,7 @@ public class staging implements Serializable{
         if(TrackId!=null){
             /*Check if the 2 blobs equals*/
             if(TrackId.equals(blobId)){
-                System.out.println("We have tracked the same file");
+//                System.out.println("We have tracked the same file");
 //                add.remove(filename);
                 return false;
             }
@@ -58,7 +58,7 @@ public class staging implements Serializable{
         /*Check if addTree has the same blob*/
 
         if(oldAddId!=null && oldAddId.equals(blobId)){
-            System.out.println("No change has been made to the add file.");
+//            System.out.println("No change has been made to the add file.");
             return false;
         }
 

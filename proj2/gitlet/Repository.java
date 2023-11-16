@@ -91,7 +91,7 @@ public class Repository {
             stagingArea.get().save();
             nowCommit.saveCommit();
         }else {
-            System.out.println("No changes added to the commit.");
+//            System.out.println("No changes added to the commit.");
         }
     }
 
