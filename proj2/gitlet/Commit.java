@@ -50,7 +50,7 @@ public class Commit implements Serializable, Dumpable {
         this.timestamp = timestamp();
     }
 
-    public  Commit(String SHA,String message){
+    public Commit(String SHA, String message) {
         Commit tmp = readObject(getObjectfileById(SHA), Commit.class);
         this.trackTree.putAll(tmp.trackTree);
         this.message = message;
@@ -58,53 +58,61 @@ public class Commit implements Serializable, Dumpable {
         this.parentCommit = SHA;
     }
 
-    public static Commit readCommit(String SHA){
-        return readObject(getObjectfileById(SHA), Commit.class);
+    public static Commit readCommit(String SHA) {
+        if (ifObjectisCommit(getObjectfileById(SHA))) {
+            return readObject(getObjectfileById(SHA), Commit.class);
+        }
+        return null;
     }
 
-    public static void printLog(String CommitID){
+    public static void printLog(String CommitID) {
         Commit logCommit = readCommit(CommitID);
         System.out.println("===");
-        System.out.println("commit "+logCommit.commitID);
-        System.out.println("Date: "+logCommit.timestamp);
-        System.out.println(logCommit.message+'\n');
-        if(logCommit.parentCommit!=null){
+        System.out.println("commit " + logCommit.commitID);
+        System.out.println("Date: " + logCommit.timestamp);
+        System.out.println(logCommit.message + '\n');
+        if (logCommit.parentCommit != null) {
             printLog(logCommit.parentCommit);
         }
     }
 
-    public static void printGloballog(){
+    public static void printGloballog() {
 //        StringBuilder commitlog = new StringBuilder();
         List<String> filenames = traverseFolder(Objects_DIR);
-        for(String filename:filenames){
+        for (String filename : filenames) {
             File file = new File(filename);
-            if(MyUtils.ifObjectisCommit(file)){
+            if (MyUtils.ifObjectisCommit(file)) {
                 Commit ifCommit = readObject(file, Commit.class);
-                if (ifCommit.commitID!=null){
+                if (ifCommit.commitID != null) {
 //                    Commit logCommit = readCommit(ifCommit.commitID);
                     System.out.println("===");
-                    System.out.println("commit "+ifCommit.commitID);
-                    System.out.println("Date: "+ifCommit.timestamp);
-                    System.out.println(ifCommit.message+'\n');
+                    System.out.println("commit " + ifCommit.commitID);
+                    System.out.println("Date: " + ifCommit.timestamp);
+                    System.out.println(ifCommit.message + '\n');
                 }
             }
         }
     }
 
-    public static StringBuilder findCommitbyMessage(String message){
+    public static StringBuilder findCommitbyMessage(String message) {
         StringBuilder commitIds = new StringBuilder();
+        int num = 0;
         List<String> filenames = traverseFolder(Objects_DIR);
-        for(String filename:filenames){
+        for (String filename : filenames) {
             File file = new File(filename);
-            if(MyUtils.ifObjectisCommit(file)){
+            if (MyUtils.ifObjectisCommit(file)) {
                 Commit ifCommit = readObject(file, Commit.class);
-                if (ifCommit.commitID!=null){
-                    if(ifCommit.getMessage().equals(message)){
+                if (ifCommit.commitID != null) {
+                    if (ifCommit.getMessage().equals(message)) {
+                        num = num + 1;
                         commitIds.append(ifCommit.commitID);
                         commitIds.append('\n');
                     }
                 }
             }
+        }
+        if (num == 0) {
+            commitIds = null;
         }
         return commitIds;
     }
@@ -126,12 +134,12 @@ public class Commit implements Serializable, Dumpable {
     }
 
     /*Add to Commit*/
-    public void addToTrack(TreeMap<String, String> indexAdd){
+    public void addToTrack(TreeMap<String, String> indexAdd) {
         trackTree.putAll(indexAdd);
     }
 
-    public void rmToTrack(Set<String> indexRm){
-        for(String rm:indexRm){
+    public void rmToTrack(Set<String> indexRm) {
+        for (String rm : indexRm) {
             trackTree.remove(rm);
         }
     }
@@ -145,7 +153,7 @@ public class Commit implements Serializable, Dumpable {
     private String timestamp() {
         Date date = new Date();
         Formatter formatter = new Formatter();
-        String timestamp = formatter.format(Locale.ENGLISH,"%1$ta %1$tb %1$td %1$tT %1$tY %1$tz", date).toString();
+        String timestamp = formatter.format(Locale.ENGLISH, "%1$ta %1$tb %1$td %1$tT %1$tY %1$tz", date).toString();
         formatter.close();
         return timestamp;
     }
@@ -154,7 +162,7 @@ public class Commit implements Serializable, Dumpable {
         commitID = sha1(toByteArray());
     }
 
-    public void setTree(TreeMap<String,String> nowTree){
+    public void setTree(TreeMap<String, String> nowTree) {
         trackTree.putAll(nowTree);
     }
 
@@ -168,7 +176,7 @@ public class Commit implements Serializable, Dumpable {
     public void dump() {
     }
 
-    public void saveHEAD(){
+    public void saveHEAD() {
         writeContents(HEAD, commitID);
     }
 

@@ -79,7 +79,7 @@ public class MyUtils {
                 return false;
             }
         } catch (IOException | ClassNotFoundException excp) {
-            throw new IllegalArgumentException(excp.getMessage());
+            return false;
         }
     }
 }
