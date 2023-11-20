@@ -167,7 +167,22 @@ public class Repository {
         } else {
             System.out.println("No such branch exists.");
         }
+    }
 
+    public void reset(String commitId){
+        String HEADbranchname = readContentsAsString(HEAD);
+        File HEADbranch = join(GITLET_DIR, HEADbranchname);
+        String headBcommitId = readContentsAsString(HEADbranch);
+
+        String checkoutId = commitId;
+        if (Commit.checkAllTracked(headBcommitId)) {
+            Commit.checkoutAll(checkoutId);
+            Commit.deleteDif(headBcommitId, checkoutId);
+            writeContents(nowbranch.get(), commitId);
+            stagingArea.get().clear();
+        }else{
+            System.out.println("There is an untracked file in the way; delete it, or add and commit it first.");
+        }
     }
 
     public void newBranch(String branchName) {

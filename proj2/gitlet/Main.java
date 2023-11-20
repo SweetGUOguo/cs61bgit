@@ -117,6 +117,11 @@ public class Main {
                     new Repository().find(args[1]);
                 }
                 break;
+            case "reset":
+                if (!Repository.checkGit()) {
+                    break;
+                }
+                new Repository().reset(args[1]);
             default:
                 System.out.println("No command with that name exists.");
         }
