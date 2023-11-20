@@ -6,7 +6,7 @@ import java.util.function.Supplier;
  * Adapt from Guava Suppliers.memoize
  *
  * @param <T> Type of the value
- * */
+ */
 public class Lazy<T> implements Supplier<T> {
     private volatile Supplier<T> delegate;
     private volatile boolean initialized;
@@ -17,10 +17,10 @@ public class Lazy<T> implements Supplier<T> {
     }
 
     @Override
-    public T get(){
-        if (!initialized){
-            synchronized (this){
-                if(!initialized){
+    public T get() {
+        if (!initialized) {
+            synchronized (this) {
+                if (!initialized) {
                     T t = delegate.get();
                     value = t;
                     initialized = true;

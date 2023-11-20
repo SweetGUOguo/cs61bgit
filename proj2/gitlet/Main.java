@@ -27,7 +27,7 @@ public class Main {
         switch (firstArg) {
             case "init":
                 // TODO: handle the `init` command
-                Repository.initRepository();
+                new Repository().initRepository();
                 break;
             case "add":
                 // TODO: handle the `add [filename]` command
@@ -65,34 +65,41 @@ public class Main {
                 }
                 switch (args.length) {
                     case 2:
+                        String branchName = args[1];
+                        new Repository().checkoutBranch(branchName);
                         break;
                     case 3:
-                        File checkoutbyFile = join(CWD, args[2]);
-                        checkout(checkoutbyFile);
+                        if (args[1].equals("--")) {
+                            File checkoutbyFile = join(CWD, args[2]);
+                            new Repository().checkout(checkoutbyFile);
+                        } else {
+                            System.out.println("Incorrect operands.");
+                        }
                         break;
                     case 4:
-                        String fileCommitId = args[1];
-                        File checkoutCommitFile = join(CWD, args[3]);
-                        checkout(fileCommitId, checkoutCommitFile);
+                        if (args[2].equals("--")) {
+                            String fileCommitId = args[1];
+                            File checkoutCommitFile = join(CWD, args[3]);
+                            new Repository().checkout(fileCommitId, checkoutCommitFile);
+                        } else {
+                            System.out.println("Incorrect operands.");
+                        }
                         break;
                 }
                 break;
+            case "branch":
+                if (!Repository.checkGit()) {
+                    break;
+                }
+                String addBranch = args[1];
+                new Repository().newBranch(addBranch);
+                break;
 
-//                File checkoutbyFile = join(CWD, args[1]);
-//                checkout(checkoutbyFile);
-//                break;
-//            case "checkout":
-//                if(!Repository.checkGit()){
-//                    break;
-//                }
-//                File checkoutFile = join(CWD, args[4]);
-//                checkout(args[1],checkoutFile);
-//                break;
             case "log":
                 if (!Repository.checkGit()) {
                     break;
                 }
-                log();
+                new Repository().log();
                 break;
             case "global-log":
                 if (!Repository.checkGit()) {
@@ -110,6 +117,8 @@ public class Main {
                     new Repository().find(args[1]);
                 }
                 break;
+            default:
+                System.out.println("No command with that name exists.");
         }
     }
 }

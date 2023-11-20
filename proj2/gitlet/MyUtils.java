@@ -17,9 +17,10 @@ public class MyUtils {
 //        readObject(aimFile,classobject);
 //    }
 
-    public static <T> Lazy<T> lazy(Supplier<T> delegate){
+    public static <T> Lazy<T> lazy(Supplier<T> delegate) {
         return new Lazy<>(delegate);
     }
+
     public static File getObjectfileById(String id) {
         File Objectfile = join(Objects_DIR, makeSha2DIR(id), makeShaFile(id));
         return Objectfile;
@@ -44,17 +45,18 @@ public class MyUtils {
 
     /**
      * get all the files in a dir
-     * all the dir in dir*/
-    public static List<String> traverseFolder(File folder){
+     * all the dir in dir
+     */
+    public static List<String> traverseFolder(File folder) {
         List<String> fileList = new ArrayList<>();
 
-        if(folder.isDirectory()){
+        if (folder.isDirectory()) {
             File[] files = folder.listFiles();
-            if(files!=null){
-                for(File file:files){
-                    if(file.isDirectory()){
+            if (files != null) {
+                for (File file : files) {
+                    if (file.isDirectory()) {
                         fileList.addAll(traverseFolder(file));
-                    }else{
+                    } else {
                         fileList.add(file.getPath());
                     }
                 }
@@ -62,10 +64,11 @@ public class MyUtils {
         }
         return fileList;
     }
+
     /**
      * Check if the file contain the Commit.class
-     * */
-    public static boolean ifObjectisCommit(File file){
+     */
+    public static boolean ifObjectisCommit(File file) {
         try {
             ObjectInputStream in = new ObjectInputStream(new FileInputStream(file));
             Object obj = in.readObject();

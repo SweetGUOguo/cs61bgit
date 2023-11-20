@@ -117,6 +117,50 @@ public class Commit implements Serializable, Dumpable {
         return commitIds;
     }
 
+    public static boolean checkAllTracked(String workingId) {
+        List<String> workFiles = plainFilenamesIn(CWD);
+        Commit workingCommit = readCommit(workingId);
+        TreeMap<String, String> fileTrackTree = workingCommit.getTrackTree();
+
+        for (String workFile : workFiles) {
+            File file = join(CWD,workFile);
+            String filewithPath = file.getPath();
+            if (!fileTrackTree.containsKey(filewithPath)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /*checkout(copy) all the files in the branchCommit
+     * to the working DIR*/
+    public static void checkoutAll(String checkoutId) {
+        Commit checkoutCommit = readCommit(checkoutId);
+        TreeMap<String, String> fileTrackTree = checkoutCommit.getTrackTree();
+        for (String filename : fileTrackTree.keySet()) {
+            File file = new File(filename);
+            String blobSHA = fileTrackTree.get(filename);
+            Blob checkoutBlob = Blob.readBlob(blobSHA);
+            byte[] content = checkoutBlob.getContent();
+            writeContents(file, content);
+        }
+    }
+
+    /*delete all the files in working DIR
+     * which are not in the branchCommit
+     * but are in the currentCommit*/
+    public static void deleteDif(String workingId, String checkoutId) {
+        Commit workingCommit = readCommit(workingId);
+        Commit checkoutCommit = readCommit(checkoutId);
+        TreeMap<String, String> workingTrackTree = workingCommit.getTrackTree();
+        TreeMap<String, String> checkoutTrackTree = checkoutCommit.getTrackTree();
+        for (String filename : workingTrackTree.keySet()) {
+            if (!checkoutTrackTree.containsKey(filename)) {
+                deleteFile(filename);
+            }
+        }
+    }
+
     public String getMessage() {
         return this.message;
     }
@@ -166,18 +210,23 @@ public class Commit implements Serializable, Dumpable {
         trackTree.putAll(nowTree);
     }
 
-    public void saveCommit() {
+    public void saveCommit(File nowbranch) {
         setCommitID();
         saveObjectFile(commitID, this);
-        saveHEAD();
+        saveHEAD(nowbranch);
     }
 
     @Override
     public void dump() {
     }
 
-    public void saveHEAD() {
-        writeContents(HEAD, commitID);
+    public void saveHEAD(File nowbranch) {
+        saveBranch(nowbranch);
+        writeContents(HEAD, nowbranch.getName());
+    }
+
+    public void saveBranch(File nowbranch) {
+        writeContents(nowbranch, commitID);
     }
 
 }
