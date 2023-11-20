@@ -37,7 +37,6 @@ public class Repository {
 //    public static final File Commits_DIR = join(Objects_DIR, "commits");
 //    public static final File Refs_DIR = join(GITLET_DIR, "refs");
     public static final File HEAD = join(GITLET_DIR, "HEAD");
-    public static final File MASTER = join(GITLET_DIR, "MASTER");
     /*Make a file named index*/
     public static final File index = join(GITLET_DIR, "index");
     /* TODO: fill in the rest of this class. */
@@ -45,7 +44,7 @@ public class Repository {
     private final Lazy<File> nowbranch = lazy(() -> {
         File branch = HEAD.exists()
                 ? readBranchFromHEAD()
-                : join(GITLET_DIR, "MASTER");
+                : join(GITLET_DIR, "master");
         return branch;
     });
     private final Lazy<staging> stagingArea = lazy(() -> {
