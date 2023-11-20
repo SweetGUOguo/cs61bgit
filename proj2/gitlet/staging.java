@@ -63,6 +63,7 @@ public class staging implements Serializable {
 
         if (oldAddId != null && oldAddId.equals(blobId)) {
 //            System.out.println("No change has been made to the add file.");
+            add.remove(filename);
             return false;
         }
 
@@ -98,10 +99,11 @@ public class staging implements Serializable {
 
     public void clear() {
         add.clear();
+        remove.clear();
     }
 
     public boolean isClear() {
-        return add.isEmpty();
+        return add.isEmpty() && remove.isEmpty();
     }
 
     /*Add a node by filename and its corresponding addblob*/
