@@ -50,17 +50,17 @@ public class Commit implements Serializable, Dumpable {
         this.timestamp = timestamp();
     }
 
-    public Commit(String SHA, String message) {
-        Commit tmp = readObject(getObjectfileById(SHA), Commit.class);
+    public Commit(String sha, String message) {
+        Commit tmp = readObject(getObjectfileById(sha), Commit.class);
         this.trackTree.putAll(tmp.trackTree);
         this.message = message;
         this.timestamp = timestamp();
-        this.parentCommit = SHA;
+        this.parentCommit = sha;
     }
 
-    public static Commit readCommit(String SHA) {
-        if (ifObjectisCommit(getObjectfileById(SHA))) {
-            return readObject(getObjectfileById(SHA), Commit.class);
+    public static Commit readCommit(String sha) {
+        if (ifObjectisCommit(getObjectfileById(sha))) {
+            return readObject(getObjectfileById(sha), Commit.class);
         }
         return null;
     }
@@ -123,7 +123,7 @@ public class Commit implements Serializable, Dumpable {
         TreeMap<String, String> fileTrackTree = workingCommit.getTrackTree();
 
         for (String workFile : workFiles) {
-            File file = join(CWD,workFile);
+            File file = join(CWD, workFile);
             String filewithPath = file.getPath();
             if (!fileTrackTree.containsKey(filewithPath)) {
                 return false;
@@ -197,7 +197,8 @@ public class Commit implements Serializable, Dumpable {
     private String timestamp() {
         Date date = new Date();
         Formatter formatter = new Formatter();
-        String timestamp = formatter.format(Locale.ENGLISH, "%1$ta %1$tb %1$td %1$tT %1$tY %1$tz", date).toString();
+        String timestamp = formatter.format(Locale.ENGLISH,
+                "%1$ta %1$tb %1$td %1$tT %1$tY %1$tz", date).toString();
         formatter.close();
         return timestamp;
     }

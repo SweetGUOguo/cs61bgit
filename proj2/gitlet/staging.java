@@ -47,11 +47,11 @@ public class staging implements Serializable {
         String blobId = addblob.getRefs();
 
         String filename = file.getPath();
-        String TrackId = trackedTree.get(filename);
+        String trackId = trackedTree.get(filename);
         /*Check if trackTree has the file*/
-        if (TrackId != null) {
+        if (trackId != null) {
             /*Check if the 2 blobs equals*/
-            if (TrackId.equals(blobId)) {
+            if (trackId.equals(blobId)) {
 //                System.out.println("We have tracked the same file");
 //                add.remove(filename);
                 return false;

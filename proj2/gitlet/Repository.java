@@ -69,9 +69,9 @@ public class Repository {
     }
 
     public static void find(String message) {
-        StringBuilder CommitIds = Commit.findCommitbyMessage(message);
-        if (CommitIds != null) {
-            System.out.print(CommitIds);
+        StringBuilder commitIds = Commit.findCommitbyMessage(message);
+        if (commitIds != null) {
+            System.out.print(commitIds);
         } else {
             System.out.println("Found no commit with that message.");
         }
@@ -160,7 +160,8 @@ public class Repository {
                     writeContents(HEAD, branchName);
                     stagingArea.get().clear();
                 }else{
-                    System.out.println("There is an untracked file in the way; delete it, or add and commit it first.");
+                    System.out.println("There is an untracked file in the way;" +
+                            " delete it, or add and commit it first.");
                 }
             }
         } else {
@@ -169,9 +170,9 @@ public class Repository {
     }
 
     public void reset(String commitId){
-        String HEADbranchname = readContentsAsString(HEAD);
-        File HEADbranch = join(GITLET_DIR, HEADbranchname);
-        String headBcommitId = readContentsAsString(HEADbranch);
+        String headBranchname = readContentsAsString(HEAD);
+        File headBranch = join(GITLET_DIR, headBranchname);
+        String headBcommitId = readContentsAsString(headBranch);
 
         String checkoutId = commitId;
         if (Commit.checkAllTracked(headBcommitId)) {
@@ -180,7 +181,8 @@ public class Repository {
             writeContents(nowbranch.get(), commitId);
             stagingArea.get().clear();
         }else{
-            System.out.println("There is an untracked file in the way; delete it, or add and commit it first.");
+            System.out.println("There is an untracked file in the way; " +
+                    "delete it, or add and commit it first.");
         }
     }
 

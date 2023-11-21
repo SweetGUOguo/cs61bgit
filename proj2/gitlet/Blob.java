@@ -18,12 +18,13 @@ public class Blob implements Serializable {
 //        get sha1
         refs = sha1(content);
     }
-    public String getRefs(){
-        return refs;
+
+    public static Blob readBlob(String SHA) {
+        return readObject(getObjectfileById(SHA), Blob.class);
     }
 
-    public byte[] getContent() {
-        return content;
+    public String getRefs() {
+        return refs;
     }
 
     /*blob class get from file by sha1, then we can get the blob's content*/
@@ -31,12 +32,12 @@ public class Blob implements Serializable {
 //        readObject(getObjectfileById(SHA), Blob.class);
 //    }
 
-    public static Blob readBlob(String SHA){
-        return readObject(getObjectfileById(SHA), Blob.class);
+    public byte[] getContent() {
+        return content;
     }
 
     /*Produce a blob from a file.*/
     public void saveblob() {
-        saveObjectFile(refs,this);
+        saveObjectFile(refs, this);
     }
 }
