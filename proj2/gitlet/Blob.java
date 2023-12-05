@@ -19,18 +19,13 @@ public class Blob implements Serializable {
         refs = sha1(content);
     }
 
-    public static Blob readBlob(String SHA) {
-        return readObject(getObjectfileById(SHA), Blob.class);
+    public static Blob readBlob(String sha) {
+        return readObject(getObjectfileById(sha), Blob.class);
     }
 
     public String getRefs() {
         return refs;
     }
-
-    /*blob class get from file by sha1, then we can get the blob's content*/
-//    public Blob(String SHA) {
-//        readObject(getObjectfileById(SHA), Blob.class);
-//    }
 
     public byte[] getContent() {
         return content;

@@ -10,7 +10,7 @@ import java.util.Set;
 import java.util.HashSet;
 import java.util.TreeMap;
 
-public class staging implements Serializable {
+public class Staging implements Serializable {
     /*TreeMap<filename, blobSHA1>*/
     private final TreeMap<String, String> add = new TreeMap<>();
     private final Set<String> remove = new HashSet<>();
@@ -22,8 +22,8 @@ public class staging implements Serializable {
 //    }
 
     /*Recover message to be add or delete of the tree from Staging*/
-    public static staging fromFile() {
-        return readObject(Repository.index, staging.class);
+    public static Staging fromFile() {
+        return readObject(Repository.INDEX, Staging.class);
     }
 
     public TreeMap<String, String> getAdd() {
@@ -86,8 +86,8 @@ public class staging implements Serializable {
             return true;
         }
 
-        String TrackId = trackedTree.get(filename);
-        if (TrackId != null) {
+        String trackId = trackedTree.get(filename);
+        if (trackId != null) {
             if (file.exists()) {
                 file.delete();
             }
@@ -120,7 +120,7 @@ public class staging implements Serializable {
 
     /*store the tree which have add/delete new file to the staging area*/
     public void save() {
-        writeObject(Repository.index, this);
+        writeObject(Repository.INDEX, this);
     }
 
     private TreeMap<String, String> treeFromCommit() {

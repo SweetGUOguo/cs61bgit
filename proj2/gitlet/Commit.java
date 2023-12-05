@@ -1,7 +1,5 @@
 package gitlet;
 
-// TODO: any imports you need here
-
 import java.io.File;
 import java.io.Serializable;
 import java.util.*;
@@ -13,18 +11,15 @@ import static gitlet.Repository.*;
 import java.util.Date;
 import java.util.Formatter;
 import java.util.Locale;
-// TODO: You'll likely use this in this class
 
 /**
  * Represents a gitlet commit object.
- *  TODO: It's a good idea to give a description here of what else this Class
  *  does at a high level.
  *
  * @author gg
  */
 public class Commit implements Serializable, Dumpable {
     /**
-     * TODO: add instance variables here.
      *
      * List all instance variables of the Commit class here with a useful
      * comment above them describing what that variable represents and how that
@@ -35,8 +30,6 @@ public class Commit implements Serializable, Dumpable {
      * The message of this Commit.
      */
     private String message;
-
-    /* TODO: fill in the rest of this class. */
     private String timestamp;
     //    Something that keeps track of what files
 //    this commit is tracking.
@@ -65,8 +58,8 @@ public class Commit implements Serializable, Dumpable {
         return null;
     }
 
-    public static void printLog(String CommitID) {
-        Commit logCommit = readCommit(CommitID);
+    public static void printLog(String commitID) {
+        Commit logCommit = readCommit(commitID);
         System.out.println("===");
         System.out.println("commit " + logCommit.commitID);
         System.out.println("Date: " + logCommit.timestamp);
@@ -78,7 +71,7 @@ public class Commit implements Serializable, Dumpable {
 
     public static void printGloballog() {
 //        StringBuilder commitlog = new StringBuilder();
-        List<String> filenames = traverseFolder(Objects_DIR);
+        List<String> filenames = traverseFolder(OBJECTS_DIR);
         for (String filename : filenames) {
             File file = new File(filename);
             if (MyUtils.ifObjectisCommit(file)) {
@@ -97,7 +90,7 @@ public class Commit implements Serializable, Dumpable {
     public static StringBuilder findCommitbyMessage(String message) {
         StringBuilder commitIds = new StringBuilder();
         int num = 0;
-        List<String> filenames = traverseFolder(Objects_DIR);
+        List<String> filenames = traverseFolder(OBJECTS_DIR);
         for (String filename : filenames) {
             File file = new File(filename);
             if (MyUtils.ifObjectisCommit(file)) {
@@ -197,10 +190,10 @@ public class Commit implements Serializable, Dumpable {
     private String timestamp() {
         Date date = new Date();
         Formatter formatter = new Formatter();
-        String timestamp = formatter.format(Locale.ENGLISH,
+        String mytimestamp = formatter.format(Locale.ENGLISH,
                 "%1$ta %1$tb %1$td %1$tT %1$tY %1$tz", date).toString();
         formatter.close();
-        return timestamp;
+        return mytimestamp;
     }
 
     public void setCommitID() {
