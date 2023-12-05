@@ -93,6 +93,8 @@ public class staging implements Serializable {
             }
             remove.add(filename);
             return true;
+        } else {
+            System.out.println("No reason to remove the file.");
         }
         return false;
     }

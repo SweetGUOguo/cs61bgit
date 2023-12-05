@@ -151,7 +151,7 @@ public class Repository {
             String headBcommitId = readContentsAsString(HEADbranch);
 
             if (branchName.equals(HEADbranchname)) {
-                System.out.println("No need to checkout the current branch.");
+//                System.out.println("No need to checkout the current branch.");
             } else {
                 String checkoutId = readContentsAsString(branch);
                 if (Commit.checkAllTracked(headBcommitId)) {
@@ -159,7 +159,7 @@ public class Repository {
                     Commit.deleteDif(headBcommitId, checkoutId);
                     writeContents(HEAD, branchName);
                     stagingArea.get().clear();
-                }else{
+                } else {
                     System.out.println("There is an untracked file in the way;" +
                             " delete it, or add and commit it first.");
                 }
@@ -169,7 +169,20 @@ public class Repository {
         }
     }
 
-    public void reset(String commitId){
+    public void rmbranch(String branchName) {
+        File branch = join(GITLET_DIR, branchName);
+        File nowbranch = readBranchFromHEAD();
+        if (branchName.equals(nowbranch.getName())) {
+            System.out.println("Cannot remove the current branch.");
+        } else if (branch.exists()) {
+            branch.delete();
+        } else {
+            System.out.println("A branch with that name does not exist.");
+        }
+
+    }
+
+    public void reset(String commitId) {
         String headBranchname = readContentsAsString(HEAD);
         File headBranch = join(GITLET_DIR, headBranchname);
         String headBcommitId = readContentsAsString(headBranch);
@@ -180,7 +193,7 @@ public class Repository {
             Commit.deleteDif(headBcommitId, checkoutId);
             writeContents(nowbranch.get(), commitId);
             stagingArea.get().clear();
-        }else{
+        } else {
             System.out.println("There is an untracked file in the way; " +
                     "delete it, or add and commit it first.");
         }
@@ -231,7 +244,7 @@ public class Repository {
                 stagingArea.get().save();
             }
         } else {
-            System.out.println("File does not exist.");
+//            System.out.println("File does not exist.");
         }
     }
 

@@ -63,6 +63,12 @@ public class Main {
                     File rmFile = join(CWD, args[1]);
                     new Repository().rm(rmFile);
                     break;
+                case "rm-branch":
+                    if(!Repository.checkGit()){
+                        break;
+                    }
+                    new Repository().rmbranch(args[1]);
+                    break;
                 case "checkout":
                     if (!Repository.checkGit()) {
                         break;
