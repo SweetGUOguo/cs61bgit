@@ -73,9 +73,11 @@ public class Repository {
 
     }
 
-    public static void deleteFile(String filename) {
+    public static void deletetxtFile(String filename) {
         File file = new File(filename);
-        restrictedDelete(file);
+        if (isTxtFile(file)) {
+            restrictedDelete(file);
+        }
     }
 
     private File readBranchFromHEAD() {
@@ -151,7 +153,7 @@ public class Repository {
                 String checkoutId = readContentsAsString(branch);
                 if (Commit.checkAllTracked(headBcommitId)) {
                     Commit.checkoutAll(checkoutId);
-                    Commit.deleteDif(headBcommitId, checkoutId);
+                    Commit.deleteDiftxt(headBcommitId, checkoutId);
                     writeContents(HEAD, branchName);
                     stagingArea.get().clear();
                 } else {
@@ -185,7 +187,7 @@ public class Repository {
         String checkoutId = commitId;
         if (Commit.checkAllTracked(headBcommitId)) {
             Commit.checkoutAll(checkoutId);
-            Commit.deleteDif(headBcommitId, checkoutId);
+            Commit.deleteDiftxt(headBcommitId, checkoutId);
             writeContents(nowbranch.get(), commitId);
             stagingArea.get().clear();
         } else {
@@ -199,8 +201,8 @@ public class Repository {
         /*cp the file which HEAD points to.*/
         String contents = readContentsAsString(nowbranch.get());
         writeContents(branch, contents);
-        /*put nowbranch into HEAD*/
-        writeContents(HEAD, branch.getName());
+        /*no! not put nowbranch into HEAD*/
+//        writeContents(HEAD, branch.getName());
     }
 
     public void log() {

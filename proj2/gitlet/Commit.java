@@ -14,7 +14,7 @@ import java.util.Locale;
 
 /**
  * Represents a gitlet commit object.
- *  does at a high level.
+ * does at a high level.
  *
  * @author gg
  */
@@ -117,9 +117,11 @@ public class Commit implements Serializable, Dumpable {
 
         for (String workFile : workFiles) {
             File file = join(CWD, workFile);
-            String filewithPath = file.getPath();
-            if (!fileTrackTree.containsKey(filewithPath)) {
-                return false;
+            if (isTxtFile(file)) {
+                String filewithPath = file.getPath();
+                if (!fileTrackTree.containsKey(filewithPath)) {
+                    return false;
+                }
             }
         }
         return true;
@@ -142,14 +144,14 @@ public class Commit implements Serializable, Dumpable {
     /*delete all the files in working DIR
      * which are not in the branchCommit
      * but are in the currentCommit*/
-    public static void deleteDif(String workingId, String checkoutId) {
+    public static void deleteDiftxt(String workingId, String checkoutId) {
         Commit workingCommit = readCommit(workingId);
         Commit checkoutCommit = readCommit(checkoutId);
         TreeMap<String, String> workingTrackTree = workingCommit.getTrackTree();
         TreeMap<String, String> checkoutTrackTree = checkoutCommit.getTrackTree();
         for (String filename : workingTrackTree.keySet()) {
             if (!checkoutTrackTree.containsKey(filename)) {
-                deleteFile(filename);
+                deletetxtFile(filename);
             }
         }
     }

@@ -69,4 +69,11 @@ public class MyUtils {
             return false;
         }
     }
+
+    public static boolean isTxtFile(File file) {
+        String fileName = file.getName();
+        String fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1);
+
+        return fileExtension.equalsIgnoreCase("txt");
+    }
 }
