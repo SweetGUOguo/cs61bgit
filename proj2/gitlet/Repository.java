@@ -193,9 +193,10 @@ public class Repository {
                 Commit.deleteDiftxt(headBcommitId, checkoutId);
                 writeContents(nowbranch.get(), commitId);
                 stagingArea.get().clear();
+            } else {
+                System.out.println("There is an untracked file in the way; "
+                        + "delete it, or add and commit it first.");
             }
-//            else {System.out.println("There is an untracked file in the way; "
-//                        + "delete it, or add and commit it first.");}
         } else {
             System.out.println("No commit with that id exists.");
         }
