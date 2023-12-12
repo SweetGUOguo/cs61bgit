@@ -161,8 +161,9 @@ public class Repository {
                     System.out.println("There is an untracked file in the way;"
                             + " delete it, or add and commit it first.");
                 }
+            } else {
+                System.out.println("No need to checkout the current branch.");
             }
-//            else {System.out.println("No need to checkout the current branch.");}
         } else {
             System.out.println("No such branch exists.");
         }
@@ -186,7 +187,7 @@ public class Repository {
         String headBcommitId = readContentsAsString(headBranch);
 
         String checkoutId = commitId;
-        if(MyUtils.ifObjectisCommit(getObjectfileById(commitId))){
+        if (MyUtils.ifObjectisCommit(getObjectfileById(commitId))) {
             if (Commit.checkAllTracked(headBcommitId)) {
                 Commit.checkoutAll(checkoutId);
                 Commit.deleteDiftxt(headBcommitId, checkoutId);
@@ -196,7 +197,7 @@ public class Repository {
                 System.out.println("There is an untracked file in the way; "
                         + "delete it, or add and commit it first.");
             }
-        }else{
+        } else {
             System.out.println("No commit with that id exists.");
         }
     }
