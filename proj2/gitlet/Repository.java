@@ -8,7 +8,7 @@ import static gitlet.MyUtils.*;
 
 /**
  * Represents a gitlet repository.
- *  does at a high level.
+ * does at a high level.
  *
  * @author GG
  */
@@ -101,8 +101,8 @@ public class Repository {
             Commit initcommit = new Commit("initial commit");
             initcommit.saveCommit(nowbranch.get());
         } else {
-            System.out.println("A Gitlet version-control system " +
-                    "already exists in the current directory.");
+            System.out.println("A Gitlet version-control system "
+                    + "already exists in the current directory.");
         }
     }
 
@@ -124,8 +124,9 @@ public class Repository {
 
     public void checkout(String sha, File file) {
         String fileName = file.getPath();
-        Commit checkoutCommit = Commit.readCommit(sha);
-        if (checkoutCommit != null) {
+        File shaFile = join(OBJECTS_DIR, sha);
+        if (MyUtils.ifObjectisCommit(shaFile)) {
+            Commit checkoutCommit = Commit.readCommit(sha);
             String blobSHA = checkoutCommit.getTrackTree().get(fileName);
             if (blobSHA != null) {
                 Blob checkoutBlob = Blob.readBlob(blobSHA);
@@ -146,9 +147,7 @@ public class Repository {
             File headBranch = join(GITLET_DIR, headBranchname);
             String headBcommitId = readContentsAsString(headBranch);
 
-            if (branchName.equals(headBranchname)) {
-//                System.out.println("No need to checkout the current branch.");
-            } else {
+            if (!branchName.equals(headBranchname)) {
                 String checkoutId = readContentsAsString(branch);
                 if (Commit.checkAllTracked(headBcommitId)) {
                     Commit.checkoutAll(checkoutId);
@@ -156,10 +155,11 @@ public class Repository {
                     writeContents(HEAD, branchName);
                     stagingArea.get().clear();
                 } else {
-                    System.out.println("There is an untracked file in the way;" +
-                            " delete it, or add and commit it first.");
+                    System.out.println("There is an untracked file in the way;"
+                            + " delete it, or add and commit it first.");
                 }
             }
+//            else {System.out.println("No need to checkout the current branch.");}
         } else {
             System.out.println("No such branch exists.");
         }
@@ -167,8 +167,7 @@ public class Repository {
 
     public void rmbranch(String branchName) {
         File branch = join(GITLET_DIR, branchName);
-        File nowbranch = readBranchFromHEAD();
-        if (branchName.equals(nowbranch.getName())) {
+        if (branchName.equals(nowbranch.get().getName())) {
             System.out.println("Cannot remove the current branch.");
         } else if (branch.exists()) {
             branch.delete();
@@ -190,8 +189,8 @@ public class Repository {
             writeContents(nowbranch.get(), commitId);
             stagingArea.get().clear();
         } else {
-            System.out.println("There is an untracked file in the way; " +
-                    "delete it, or add and commit it first.");
+            System.out.println("There is an untracked file in the way; "
+                    + "delete it, or add and commit it first.");
         }
     }
 
@@ -228,8 +227,9 @@ public class Repository {
             stagingArea.get().clear();
             stagingArea.get().save();
             nowCommit.saveCommit(nowbranch.get());
+        } else {
+            System.out.println("No changes added to the commit.");
         }
-//        else{System.out.println("No changes added to the commit.");}
     }
 
     public void rm(File rmFile) {
@@ -237,9 +237,7 @@ public class Repository {
             if (stagingArea.get().rmstage(rmFile)) {
                 stagingArea.get().save();
             }
-        } else {
-//            System.out.println("File does not exist.");
         }
+//        else {System.out.println("File does not exist.");}
     }
-
 }

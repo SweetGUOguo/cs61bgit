@@ -62,16 +62,9 @@ public class MyUtils {
      * Check if the file contain the Commit.class
      */
     public static boolean ifObjectisCommit(File file) {
-        try {
-            ObjectInputStream in = new ObjectInputStream(new FileInputStream(file));
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(file))) {
             Object obj = in.readObject();
-            in.close();
-
-            if (obj instanceof Commit) {
-                return true;
-            } else {
-                return false;
-            }
+            return obj instanceof Commit;
         } catch (IOException | ClassNotFoundException excp) {
             return false;
         }
