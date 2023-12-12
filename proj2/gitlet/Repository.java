@@ -126,7 +126,8 @@ public class Repository {
 
     public void checkout(String sha, File file) {
         String fileName = file.getPath();
-        File shaFile = join(OBJECTS_DIR, sha);
+//        File shaFile = join(OBJECTS_DIR, sha);
+        File shaFile = getObjectfileById(sha);
         if (MyUtils.ifObjectisCommit(shaFile)) {
             Commit checkoutCommit = Commit.readCommit(sha);
             String blobSHA = checkoutCommit.getTrackTree().get(fileName);
@@ -185,24 +186,32 @@ public class Repository {
         String headBcommitId = readContentsAsString(headBranch);
 
         String checkoutId = commitId;
-        if (Commit.checkAllTracked(headBcommitId)) {
-            Commit.checkoutAll(checkoutId);
-            Commit.deleteDiftxt(headBcommitId, checkoutId);
-            writeContents(nowbranch.get(), commitId);
-            stagingArea.get().clear();
-        } else {
-            System.out.println("There is an untracked file in the way; "
-                    + "delete it, or add and commit it first.");
+        if(MyUtils.ifObjectisCommit(getObjectfileById(commitId))){
+            if (Commit.checkAllTracked(headBcommitId)) {
+                Commit.checkoutAll(checkoutId);
+                Commit.deleteDiftxt(headBcommitId, checkoutId);
+                writeContents(nowbranch.get(), commitId);
+                stagingArea.get().clear();
+            } else {
+                System.out.println("There is an untracked file in the way; "
+                        + "delete it, or add and commit it first.");
+            }
+        }else{
+            System.out.println("No commit with that id exists.");
         }
     }
 
     public void newBranch(String branchName) {
         File branch = join(GITLET_DIR, branchName);
         /*cp the file which HEAD points to.*/
-        String contents = readContentsAsString(nowbranch.get());
-        writeContents(branch, contents);
-        /*no! not put nowbranch into HEAD*/
+        if (branch.exists()) {
+            System.out.println("A branch with that name already exists.");
+        } else {
+            String contents = readContentsAsString(nowbranch.get());
+            writeContents(branch, contents);
+            /*no! not put nowbranch into HEAD*/
 //        writeContents(HEAD, branch.getName());
+        }
     }
 
     public void log() {
