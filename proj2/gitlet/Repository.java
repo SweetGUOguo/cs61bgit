@@ -156,7 +156,7 @@ public class Repository {
 
             if (!branchName.equals(headBranchname)) {
                 String checkoutId = readContentsAsString(branch);
-                if (Commit.checkAllTracked(headBcommitId)) {
+                if (Commit.checkAllTracked(headBcommitId, checkoutId)) {
                     Commit.checkoutAll(checkoutId);
                     Commit.deleteDiftxt(headBcommitId, checkoutId);
                     writeContents(HEAD, branchName);
@@ -192,20 +192,14 @@ public class Repository {
 
         String checkoutId = commitId;
         if (MyUtils.ifObjectisCommit(getObjectfileById(commitId))) {
-            if (Commit.checkAllTracked(headBcommitId)) {
+            if (Commit.checkAllTracked(headBcommitId, checkoutId)) {
                 Commit.checkoutAll(checkoutId);
                 Commit.deleteDiftxt(headBcommitId, checkoutId);
                 writeContents(nowbranch.get(), commitId);
                 stagingArea.get().clear();
             } else {
-//                noooo! just for grader
-                File file = join(CWD,"m.txt");
-                if(!stagingArea.get().getAdd().containsKey(file.getPath())){
-                    System.out.println("There is an untracked file in the way; "
-                            + "delete it, or add and commit it first.");
-                }
-//                System.out.println("There is an untracked file in the way; "
-//                        + "delete it, or add and commit it first.");
+                System.out.println("There is an untracked file in the way; "
+                        + "delete it, or add and commit it first.");
             }
         } else {
             System.out.println("No commit with that id exists.");

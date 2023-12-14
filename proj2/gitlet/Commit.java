@@ -110,17 +110,21 @@ public class Commit implements Serializable, Dumpable {
         return commitIds;
     }
 
-    public static boolean checkAllTracked(String workingId) {
+    public static boolean checkAllTracked(String workingId, String checkoutId) {
         List<String> workFiles = plainFilenamesIn(CWD);
         Commit workingCommit = readCommit(workingId);
+        Commit checkoutCommit = readCommit(checkoutId);
         TreeMap<String, String> fileTrackTree = workingCommit.getTrackTree();
+        TreeMap<String, String> checkoutTrackTree = checkoutCommit.getTrackTree();
 
         for (String workFile : workFiles) {
             File file = join(CWD, workFile);
             if (isTxtFile(file)) {
                 String filewithPath = file.getPath();
-                if (!fileTrackTree.containsKey(filewithPath)) {
-                    return false;
+                if (checkoutTrackTree.containsKey(filewithPath)) {
+                    if (!fileTrackTree.containsKey(filewithPath)) {
+                        return false;
+                    }
                 }
             }
         }
