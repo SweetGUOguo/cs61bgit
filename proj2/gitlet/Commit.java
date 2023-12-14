@@ -156,6 +156,14 @@ public class Commit implements Serializable, Dumpable {
         }
     }
 
+    public static TreeMap<String, String> getNowtracked(){
+        String headBranchname = readContentsAsString(HEAD);
+        File headBranch = join(GITLET_DIR, headBranchname);
+        String headBcommitId = readContentsAsString(headBranch);
+        Commit workingCommit = readCommit(headBcommitId);
+        return workingCommit.getTrackTree();
+    }
+
     public String getMessage() {
         return this.message;
     }
@@ -210,6 +218,20 @@ public class Commit implements Serializable, Dumpable {
         setCommitID();
         saveObjectFile(commitID, this);
         saveHEAD(nowbranch);
+    }
+
+    public static boolean checknowCommit(File file){
+        String filewithPath = file.getPath();
+        Blob fileblob = new Blob(file);
+        String blobId = fileblob.getRefs();
+// get the now-tracked tree
+        TreeMap<String, String> fileTrackTree = Commit.getNowtracked();
+        if(fileTrackTree.containsKey(filewithPath)){
+            if(blobId.equals(fileTrackTree.get(filewithPath))){
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

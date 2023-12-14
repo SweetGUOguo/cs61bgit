@@ -26,7 +26,7 @@ public class Staging implements Serializable {
         return readObject(Repository.INDEX, Staging.class);
     }
 
-    public TreeMap<String, String> getAdd() {
+    public  TreeMap<String, String> getAdd() {
         return add;
     }
 
@@ -132,5 +132,4 @@ public class Staging implements Serializable {
     public void setTrackedTree() {
         trackedTree = treeFromCommit();
     }
-
 }

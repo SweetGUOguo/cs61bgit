@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
+import java.io.File;
+import java.util.Collections;
+
+
 
 import static gitlet.Repository.*;
 import static gitlet.Utils.*;
@@ -57,6 +61,28 @@ public class MyUtils {
         }
         return fileList;
     }
+    /**
+     * get all the files in a dir
+     * NO the dir in dir
+     */
+    public static String[] traverseFiles(File directory) {
+        List<String> fileNames = new ArrayList<>();
+        if (directory.isDirectory()) {
+            File[] files = directory.listFiles();
+            if (files != null) {
+                for (File file : files) {
+                    if (file.isFile()) {
+                        fileNames.add(file.getName());
+                    }
+                }
+            }
+        }
+        fileNames.remove("index");
+        fileNames.remove("HEAD");
+        Collections.sort(fileNames);
+        return fileNames.toArray(new String[0]);
+    }
+
 
     /**
      * Check if the file contain the Commit.class

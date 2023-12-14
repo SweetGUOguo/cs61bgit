@@ -60,8 +60,8 @@ public class Main {
                     if (!Repository.checkGit()) {
                         break;
                     }
-                    File rmFile = join(CWD, args[1]);
-                    new Repository().rm(rmFile);
+//                    File rmFile = join(CWD, args[1]);
+                    new Repository().rm(args[1]);
                     break;
                 case "rm-branch":
                     if(!Repository.checkGit()){
@@ -126,6 +126,12 @@ public class Main {
                     } else {
                         new Repository().find(args[1]);
                     }
+                    break;
+                case "status":
+                    if (!Repository.checkGit()) {
+                        break;
+                    }
+                    new Repository().status();
                     break;
                 case "reset":
                     if (!Repository.checkGit()) {

@@ -5,6 +5,10 @@ import java.io.File;
 import static gitlet.Utils.*;
 import static gitlet.MyUtils.*;
 
+import java.util.List;
+import java.util.Set;
+import java.util.TreeMap;
+
 
 /**
  * Represents a gitlet repository.
@@ -220,6 +224,130 @@ public class Repository {
         Commit.printLog(headCommitID);
     }
 
+    public void status() {
+        printBranch();
+        printAddstage();
+        printRemovestage();
+        printModifications();
+        printUntracked();
+    }
+
+    private void printBranch() {
+        System.out.println("=== Branches ===");
+        String headBranchname = readContentsAsString(HEAD);
+
+        String[] fileNames = traverseFiles(GITLET_DIR);
+        for (String fileName : fileNames) {
+            if (fileName.equals(headBranchname)) {
+                System.out.print("*");
+            }
+            System.out.println(fileName);
+        }
+        System.out.println();
+    }
+
+    private void printAddstage() {
+        System.out.println("=== Staged Files ===");
+        Set<String> adds = stagingArea.get().getAdd().keySet();
+        for (String add : adds) {
+            File filewithPath = new File(add);
+            String filename = filewithPath.getName();
+            System.out.println(filename);
+        }
+        System.out.println();
+    }
+
+    private void printRemovestage() {
+        System.out.println("=== Removed Files ===");
+        Set<String> removes = stagingArea.get().getRemove();
+        for (String remove : removes) {
+            File filewithPath = new File(remove);
+            String filename = filewithPath.getName();
+            System.out.println(filename);
+        }
+        System.out.println();
+    }
+
+    private void printModifications() {
+        System.out.println("=== Modifications Not Staged For Commit ===");
+        // get the file
+        List<String> workFiles = plainFilenamesIn(CWD);
+        // get the now-tracked tree
+        TreeMap<String, String> fileTrackTree = Commit.getNowtracked();
+
+        for (String workFile : workFiles) {
+            File file = join(CWD, workFile);
+            if (isTxtFile(file)) {
+                if (fileTrackTree.containsKey(file.getPath())) {
+                    if (!Commit.checknowCommit(file)) {
+                        if (!checknowAdd(file)) {
+                            System.out.println(file.getName() + " (modified)");
+                        }
+                    }
+                } else {
+                    if (stagingArea.get().getAdd().containsKey(file.getPath())) {
+                        if (!checknowAdd(file)) {
+                            System.out.println(file.getName() + " (modified)");
+                        }
+                    }
+                }
+            }
+        }
+
+        for (String addstageFile : stagingArea.get().getAdd().keySet()) {
+            File file = new File(addstageFile);
+            if (!workFiles.contains(file.getName())) {
+                System.out.println(file.getName() + " (deleted)");
+            }
+        }
+
+        for (String nowommitFile : Commit.getNowtracked().keySet()) {
+            File file = new File(nowommitFile);
+            if (!workFiles.contains(file.getName())) {
+                if (!stagingArea.get().getRemove().contains(file.getPath())) {
+                    System.out.println(file.getName() + " (deleted)");
+                }
+            }
+        }
+        System.out.println();
+    }
+
+    private boolean checknowAdd(File file) {
+        Blob fileblob = new Blob(file);
+        String blobId = fileblob.getRefs();
+        if (stagingArea.get().getAdd().containsKey(file.getPath())) {
+            if (stagingArea.get().getAdd().get(file.getPath()).equals(blobId)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void printUntracked() {
+        System.out.println("=== Untracked Files ===");
+
+        List<String> workFiles = plainFilenamesIn(CWD);
+        for (String workFile : workFiles) {
+            File file = join(CWD, workFile);
+            if (isTxtFile(file)) {
+                if (!Commit.getNowtracked().containsKey(file.getPath())) {
+                    if (!stagingArea.get().getAdd().containsKey(file.getPath())) {
+                        System.out.println(file.getName());
+                    }
+                }
+            }
+        }
+
+        for (String rmfile : stagingArea.get().getRemove()) {
+            File file = new File(rmfile);
+            if (workFiles.contains(file.getName())) {
+                System.out.println(file.getName());
+            }
+        }
+
+        System.out.println();
+    }
+
     public void add(File addFile) {
         if (addFile.exists()) {
             if (stagingArea.get().addstage(addFile)) {
@@ -244,8 +372,13 @@ public class Repository {
         }
     }
 
-    public void rm(File rmFile) {
+    public void rm(String rm) {
+        File rmFile = join(CWD, rm);
         if (rmFile.exists()) {
+            if (stagingArea.get().rmstage(rmFile)) {
+                stagingArea.get().save();
+            }
+        } else {
             if (stagingArea.get().rmstage(rmFile)) {
                 stagingArea.get().save();
             }
