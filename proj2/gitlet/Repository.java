@@ -59,7 +59,7 @@ public class Repository {
         if (GITLET_DIR.exists()) {
             return true;
         }
-        System.out.println("Not init yet.");
+        System.out.println("Not in an initialized Gitlet directory.");
         return false;
     }
 
