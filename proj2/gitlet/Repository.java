@@ -161,6 +161,7 @@ public class Repository {
                     Commit.deleteDiftxt(headBcommitId, checkoutId);
                     writeContents(HEAD, branchName);
                     stagingArea.get().clear();
+                    stagingArea.get().save();
                 } else {
                     System.out.println("There is an untracked file in the way;"
                             + " delete it, or add and commit it first.");
@@ -197,6 +198,7 @@ public class Repository {
                 Commit.deleteDiftxt(headBcommitId, checkoutId);
                 writeContents(nowbranch.get(), commitId);
                 stagingArea.get().clear();
+                stagingArea.get().save();
             } else {
                 System.out.println("There is an untracked file in the way; "
                         + "delete it, or add and commit it first.");
