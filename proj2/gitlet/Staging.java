@@ -52,7 +52,7 @@ public class Staging implements Serializable {
         if (trackId != null) {
             /*Check if the 2 blobs equals*/
             if (trackId.equals(blobId)) {
-                if(remove.contains(filename)){
+                if (remove.contains(filename)) {
                     remove.remove(filename);
                     return true;
                 }
