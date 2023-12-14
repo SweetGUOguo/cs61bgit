@@ -26,7 +26,7 @@ public class Staging implements Serializable {
         return readObject(Repository.INDEX, Staging.class);
     }
 
-    public  TreeMap<String, String> getAdd() {
+    public TreeMap<String, String> getAdd() {
         return add;
     }
 
@@ -52,6 +52,10 @@ public class Staging implements Serializable {
         if (trackId != null) {
             /*Check if the 2 blobs equals*/
             if (trackId.equals(blobId)) {
+                if(remove.contains(filename)){
+                    remove.remove(filename);
+                    return true;
+                }
 //                System.out.println("We have tracked the same file");
 //                add.remove(filename);
                 return false;
