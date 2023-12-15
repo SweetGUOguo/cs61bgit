@@ -33,7 +33,7 @@ public class Commit implements Serializable, Dumpable {
     private String timestamp;
     //    Something that keeps track of what files
 //    this commit is tracking.
-    private List<String> parentCommit;
+    private List<String> parentCommit = new ArrayList<>();
     private TreeMap<String, String> trackTree = new TreeMap<>();
     private String commitID;
 
@@ -210,7 +210,7 @@ public class Commit implements Serializable, Dumpable {
     }
 
     public String toByteArray() {
-        String commitstring = message + timestamp + parentCommit.get(0);
+        String commitstring = message + timestamp + parentCommit;
         return commitstring;
     }
 

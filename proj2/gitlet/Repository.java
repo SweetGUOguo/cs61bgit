@@ -446,9 +446,7 @@ public class Repository {
                                 newCommit.getTrackTree().put(filename, currentTree.get(filename));
                             } else {
                                 /*both diff*/
-                                //提取文件1和文件2
-                                //在当前目录直接按照如下格式复写
-                                //stage此文件
+
                             /*
                             * <<<<<<< HEAD
                             contents of file in current branch
@@ -470,7 +468,7 @@ public class Repository {
                                 .equals(currentTree.get(filename))) {
                             if (!splitTree.get(filename)
                                     .equals(targetTree.get(filename))) {
-                                //储存新文件
+                                //
                             }
                         } else {
                             if (splitTree.get(filename)
@@ -478,9 +476,7 @@ public class Repository {
                                 newCommit.getTrackTree().put(filename, currentTree.get(filename));
                             } else {
                                 /*both diff*/
-                                //提取文件1和文件2
-                                //在当前目录直接按照如下格式复写
-                                //stage此文件
+
                             /*
                             * <<<<<<< HEAD
                             contents of file in current branch
