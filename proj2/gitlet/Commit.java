@@ -33,7 +33,7 @@ public class Commit implements Serializable, Dumpable {
     private String timestamp;
     //    Something that keeps track of what files
 //    this commit is tracking.
-    private String parentCommit;
+    private List<String> parentCommit;
     private TreeMap<String, String> trackTree = new TreeMap<>();
     private String commitID;
 
@@ -48,7 +48,7 @@ public class Commit implements Serializable, Dumpable {
         this.trackTree.putAll(tmp.trackTree);
         this.message = message;
         this.timestamp = timestamp();
-        this.parentCommit = sha;
+        this.parentCommit.add(sha);
     }
 
     public static Commit readCommit(String sha) {
@@ -65,7 +65,7 @@ public class Commit implements Serializable, Dumpable {
         System.out.println("Date: " + logCommit.timestamp);
         System.out.println(logCommit.message + '\n');
         if (logCommit.parentCommit != null) {
-            printLog(logCommit.parentCommit);
+            printLog(logCommit.parentCommit.get(0));
         }
     }
 
@@ -194,7 +194,7 @@ public class Commit implements Serializable, Dumpable {
         return this.trackTree;
     }
 
-    public String getParent() {
+    public List<String> getParent() {
         return this.parentCommit;
     }
 

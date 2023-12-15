@@ -387,4 +387,109 @@ public class Repository {
         }
 //        else {System.out.println("File does not exist.");}
     }
+
+    public void merge(String targetBranchname) {
+        if (!stagingArea.get().isClear()) {
+            System.out.println("You have uncommitted changes.");
+            return;
+        }
+        File targetBranch = join(GITLET_DIR, targetBranchname);
+        if (!targetBranch.exists()) {
+            System.out.println("A branch with that name does not exist.");
+            return;
+        }
+        String currentBranchname = nowbranch.get().getName();
+        if (targetBranchname.equals(currentBranchname)) {
+            System.out.println("Cannot merge a branch with itself.");
+            return;
+        }
+        File currentBranchfile = join(GITLET_DIR, currentBranchname);
+        String currentCommitId = readContentsAsString(currentBranchfile);
+        File targetCommitfile = join(GITLET_DIR, targetBranchname);
+        String targetCommitId = readContentsAsString(targetCommitfile);
+
+        /*Check if there is an untracked file that would be overwritten or deleted */
+        if (Commit.checkAllTracked(currentCommitId, targetCommitId)) {
+            System.out.println("There is an untracked file in the way; delete it, or add and commit it first.");
+            return;
+        }
+
+        /*Find the splitCommit*/
+        String splitCommitid = findSplit(currentCommitId, targetCommitId);
+        Commit splitCommit = Commit.readCommit(splitCommitid);
+        Commit currentCommit = Commit.readCommit(currentCommitId);
+        Commit targetCommit = Commit.readCommit(targetCommitId);
+        Commit newCommit = new Commit(splitCommitid);
+
+        TreeMap<String, String> splitTree = splitCommit.getTrackTree();
+        TreeMap<String, String> currentTree = currentCommit.getTrackTree();
+        TreeMap<String, String> targetTree = targetCommit.getTrackTree();
+        TreeMap<String, String> allTree = new TreeMap<>();
+        allTree.putAll(splitTree);
+        allTree.putAll(currentTree);
+        allTree.putAll(targetTree);
+
+        for (String filename : allTree.keySet()) {
+            if (splitTree.containsKey(filename)) {
+                if (currentTree.containsKey(filename)) {
+                    /*two contains*/
+                    if (targetTree.containsKey(filename)) {
+                        if (splitTree.get(filename)
+                                .equals(currentTree.get(filename))) {
+                            if (!splitTree.get(filename)
+                                    .equals(targetTree.get(filename))) {
+                                newCommit.getTrackTree().put(filename, targetTree.get(filename));
+                            }
+                        } else {
+                            if (splitTree.get(filename)
+                                    .equals(targetTree.get(filename))) {
+                                newCommit.getTrackTree().put(filename, currentTree.get(filename));
+                            } else {
+
+                            /*
+                            * <<<<<<< HEAD
+                            contents of file in current branch
+                            =======
+                            contents of file in given branch
+                            >>>>>>>
+                            *
+                            * */
+
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
+    private String findSplit(String currentId, String targetId) {
+        TreeMap<String, Integer> currentMap = buildCommitMap(currentId);
+        TreeMap<String, Integer> targetMap = buildCommitMap(targetId);
+        String splitCommit = "";
+        int minDepth = Integer.MAX_VALUE;
+        for (String commitId : currentMap.keySet()) {
+            if (targetMap.containsKey(commitId)) {
+                if (currentMap.get(commitId) < minDepth) {
+                    splitCommit = commitId;
+                    minDepth = currentMap.get(commitId);
+                }
+
+            }
+        }
+        return splitCommit;
+    }
+
+    private TreeMap<String, Integer> buildCommitMap(String commitId) {
+        TreeMap<String, Integer> treeCommit = new TreeMap<>();
+        int i = 0;
+        while (commitId != null) {
+            treeCommit.put(commitId, i);
+            Commit addCommit = Commit.readCommit(commitId);
+            commitId = addCommit.getParent().get(0);
+            i = i + 1;
+        }
+        return treeCommit;
+    }
 }
