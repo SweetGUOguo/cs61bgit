@@ -445,7 +445,42 @@ public class Repository {
                                     .equals(targetTree.get(filename))) {
                                 newCommit.getTrackTree().put(filename, currentTree.get(filename));
                             } else {
+                                /*both diff*/
+                                //提取文件1和文件2
+                                //在当前目录直接按照如下格式复写
+                                //stage此文件
+                            /*
+                            * <<<<<<< HEAD
+                            contents of file in current branch
+                            =======
+                            contents of file in given branch
+                            >>>>>>>
+                            *
+                            * */
 
+                            }
+                        }
+                    }
+                }
+            } else{
+                if (currentTree.containsKey(filename)) {
+                    /*two contains*/
+                    if (targetTree.containsKey(filename)) {
+                        if (splitTree.get(filename)
+                                .equals(currentTree.get(filename))) {
+                            if (!splitTree.get(filename)
+                                    .equals(targetTree.get(filename))) {
+                                //储存新文件
+                            }
+                        } else {
+                            if (splitTree.get(filename)
+                                    .equals(targetTree.get(filename))) {
+                                newCommit.getTrackTree().put(filename, currentTree.get(filename));
+                            } else {
+                                /*both diff*/
+                                //提取文件1和文件2
+                                //在当前目录直接按照如下格式复写
+                                //stage此文件
                             /*
                             * <<<<<<< HEAD
                             contents of file in current branch

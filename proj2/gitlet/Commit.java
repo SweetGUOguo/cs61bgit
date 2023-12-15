@@ -210,7 +210,7 @@ public class Commit implements Serializable, Dumpable {
     }
 
     public String toByteArray() {
-        String commitstring = message + timestamp + parentCommit;
+        String commitstring = message + timestamp + parentCommit.get(0);
         return commitstring;
     }
 
