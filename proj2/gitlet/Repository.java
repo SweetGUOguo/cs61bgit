@@ -434,7 +434,8 @@ public class Repository {
 
         /*Check if there is an untracked file that would be overwritten or deleted */
         if (!Commit.checkAllTracked(currentCommitId, targetCommitId)) {
-            System.out.println("There is an untracked file in the way; delete it, or add and commit it first.");
+            System.out.println("There is an untracked file in the way; " +
+                    "delete it, or add and commit it first.");
             return;
         }
 
@@ -479,7 +480,7 @@ public class Repository {
                                     byte[] ccontent = checkoutcBlob.getContent();
                                     byte[] tcontent = checkouttBlob.getContent();
                                     File file = new File(filename);
-                                    writeContents(file, "<<<<<<< HEAD", '\n', ccontent, "=======", '\n', tcontent, ">>>>>>>");
+                                    writeContents(file, "<<<<<<< HEAD", '\n', ccontent, "=======", '\n', tcontent, "\n", ">>>>>>>");
 
                                     Blob addblob = new Blob(file);
                                     addblob.saveblob();
@@ -527,7 +528,7 @@ public class Repository {
                             byte[] ccontent = checkoutcBlob.getContent();
                             byte[] tcontent = checkouttBlob.getContent();
                             File file = new File(filename);
-                            writeContents(file, "<<<<<<< HEAD", '\n', ccontent, "=======", '\n', tcontent, ">>>>>>>");
+                            writeContents(file, "<<<<<<< HEAD", "\n", ccontent, "=======", "\n", tcontent, "\n", ">>>>>>>");
 
                             Blob addblob = new Blob(file);
                             addblob.saveblob();

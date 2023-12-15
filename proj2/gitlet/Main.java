@@ -23,10 +23,9 @@ public class Main {
      */
     public static void main(String[] args) {
         // TODO: what if args is empty?
-        if(args.length==0){
+        if (args.length == 0) {
             System.out.println("Please enter a command.");
-        }
-        else {
+        } else {
             String firstArg = args[0];
             switch (firstArg) {
                 case "init":
@@ -64,7 +63,7 @@ public class Main {
                     new Repository().rm(args[1]);
                     break;
                 case "rm-branch":
-                    if(!Repository.checkGit()){
+                    if (!Repository.checkGit()) {
                         break;
                     }
                     new Repository().rmbranch(args[1]);
