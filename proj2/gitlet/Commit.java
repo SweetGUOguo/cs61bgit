@@ -182,6 +182,25 @@ public class Commit implements Serializable, Dumpable {
         return false;
     }
 
+    //    public Commit newmergeCommit(Commit splitcommit,Commit currentcommit,Commit targetcommit){
+//        Commit newCommit = splitcommit;
+//        newCommit.parentCommit.clear();
+//        newCommit.parentCommit.add(currentcommit.commitID);
+//        newCommit.parentCommit.add(targetcommit.commitID);
+//        currentcommit.mess
+//    }
+    public void setMerge(Commit currentcommit, Commit targetcommit) {
+        this.parentCommit.clear();
+        this.parentCommit.add(currentcommit.commitID);
+        this.parentCommit.add(targetcommit.commitID);
+        this.timestamp = timestamp();
+        this.setCommitID();
+    }
+
+    public void setMessage(String currentbranchName, String targetbranchName) {
+        this.message = "Merged " + targetbranchName + " into " + currentbranchName + ".";
+    }
+
     public String getMessage() {
         return this.message;
     }

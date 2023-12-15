@@ -174,6 +174,30 @@ public class Repository {
         }
     }
 
+    public void checkoutMerge(String branchName) {
+        File branch = join(GITLET_DIR, branchName);
+        if (branch.exists()) {
+            String headBranchname = readContentsAsString(HEAD);
+            File headBranch = join(GITLET_DIR, headBranchname);
+            String headBcommitId = readContentsAsString(headBranch);
+
+            String checkoutId = readContentsAsString(branch);
+            if (Commit.checkAllTracked(headBcommitId, checkoutId)) {
+                Commit.checkoutAll(checkoutId);
+                Commit.deleteDiftxt(headBcommitId, checkoutId);
+                writeContents(HEAD, branchName);
+                stagingArea.get().clear();
+                stagingArea.get().save();
+            } else {
+                System.out.println("There is an untracked file in the way;"
+                        + " delete it, or add and commit it first.");
+            }
+
+        } else {
+            System.out.println("No such branch exists.");
+        }
+    }
+
     public void rmbranch(String branchName) {
         File branch = join(GITLET_DIR, branchName);
         if (branchName.equals(nowbranch.get().getName())) {
@@ -409,7 +433,7 @@ public class Repository {
         String targetCommitId = readContentsAsString(targetCommitfile);
 
         /*Check if there is an untracked file that would be overwritten or deleted */
-        if (Commit.checkAllTracked(currentCommitId, targetCommitId)) {
+        if (!Commit.checkAllTracked(currentCommitId, targetCommitId)) {
             System.out.println("There is an untracked file in the way; delete it, or add and commit it first.");
             return;
         }
@@ -419,7 +443,7 @@ public class Repository {
         Commit splitCommit = Commit.readCommit(splitCommitid);
         Commit currentCommit = Commit.readCommit(currentCommitId);
         Commit targetCommit = Commit.readCommit(targetCommitId);
-        Commit newCommit = new Commit(splitCommitid);
+        Commit newCommit = Commit.readCommit(splitCommitid);
 
         TreeMap<String, String> splitTree = splitCommit.getTrackTree();
         TreeMap<String, String> currentTree = currentCommit.getTrackTree();
@@ -434,64 +458,99 @@ public class Repository {
                 if (currentTree.containsKey(filename)) {
                     /*two contains*/
                     if (targetTree.containsKey(filename)) {
-                        if (splitTree.get(filename)
-                                .equals(currentTree.get(filename))) {
-                            if (!splitTree.get(filename)
-                                    .equals(targetTree.get(filename))) {
+                        //targetTree v
+                        //currentTree v
+                        if (splitTree.get(filename).equals(currentTree.get(filename))) {
+                            if (!splitTree.get(filename).equals(targetTree.get(filename))) {
                                 newCommit.getTrackTree().put(filename, targetTree.get(filename));
                             }
                         } else {
-                            if (splitTree.get(filename)
-                                    .equals(targetTree.get(filename))) {
+                            if (splitTree.get(filename).equals(targetTree.get(filename))) {
                                 newCommit.getTrackTree().put(filename, currentTree.get(filename));
                             } else {
-                                /*both diff*/
+                                if (currentTree.get(filename).equals(targetTree.get(filename))) {
+                                    newCommit.getTrackTree().put(filename, currentTree.get(filename));
+                                } else {
+                                    /*both diff*/
+                                    String tblobSHA = targetTree.get(filename);
+                                    String cblobSHA = currentTree.get(filename);
+                                    Blob checkoutcBlob = Blob.readBlob(cblobSHA);
+                                    Blob checkouttBlob = Blob.readBlob(tblobSHA);
+                                    byte[] ccontent = checkoutcBlob.getContent();
+                                    byte[] tcontent = checkouttBlob.getContent();
+                                    File file = new File(filename);
+                                    writeContents(file, "<<<<<<< HEAD", '\n', ccontent, "=======", '\n', tcontent, ">>>>>>>");
 
-                            /*
-                            * <<<<<<< HEAD
-                            contents of file in current branch
-                            =======
-                            contents of file in given branch
-                            >>>>>>>
-                            *
-                            * */
-
+                                    Blob addblob = new Blob(file);
+                                    addblob.saveblob();
+                                    newCommit.getTrackTree().put(filename, addblob.getRefs());
+                                }
                             }
                         }
+                    } else {
+                        //targetTree x
+                        //currentTree v
+                        if (splitTree.get(filename).equals(currentTree.get(filename))) {
+                            newCommit.getTrackTree().remove(filename);
+                        } else {
+                            newCommit.getTrackTree().put(filename, currentTree.get(filename));
+                        }
+                    }
+                } else {
+                    if (targetTree.containsKey(filename)) {
+                        //targetTree v
+                        //currentTree x
+                        if (splitTree.get(filename).equals(targetTree.get(filename))) {
+                            newCommit.getTrackTree().remove(filename);
+                        } else {
+                            newCommit.getTrackTree().put(filename, targetTree.get(filename));
+                        }
+
+                    } else {
+                        newCommit.getTrackTree().remove(filename);
                     }
                 }
-            } else{
+            } else {
                 if (currentTree.containsKey(filename)) {
                     /*two contains*/
                     if (targetTree.containsKey(filename)) {
-                        if (splitTree.get(filename)
-                                .equals(currentTree.get(filename))) {
-                            if (!splitTree.get(filename)
-                                    .equals(targetTree.get(filename))) {
-                                //
-                            }
+                        //对比文件内容
+                        //targetTree v
+                        //currentTree v
+                        if (currentTree.get(filename).equals(targetTree.get(filename))) {
+                            newCommit.getTrackTree().put(filename, currentTree.get(filename));
                         } else {
-                            if (splitTree.get(filename)
-                                    .equals(targetTree.get(filename))) {
-                                newCommit.getTrackTree().put(filename, currentTree.get(filename));
-                            } else {
-                                /*both diff*/
+                            String tblobSHA = targetTree.get(filename);
+                            String cblobSHA = currentTree.get(filename);
+                            Blob checkoutcBlob = Blob.readBlob(cblobSHA);
+                            Blob checkouttBlob = Blob.readBlob(tblobSHA);
+                            byte[] ccontent = checkoutcBlob.getContent();
+                            byte[] tcontent = checkouttBlob.getContent();
+                            File file = new File(filename);
+                            writeContents(file, "<<<<<<< HEAD", '\n', ccontent, "=======", '\n', tcontent, ">>>>>>>");
 
-                            /*
-                            * <<<<<<< HEAD
-                            contents of file in current branch
-                            =======
-                            contents of file in given branch
-                            >>>>>>>
-                            *
-                            * */
-
-                            }
+                            Blob addblob = new Blob(file);
+                            addblob.saveblob();
+                            newCommit.getTrackTree().put(filename, addblob.getRefs());
                         }
+                    } else {
+                        //targetTree x
+                        //currentTree v
+                        newCommit.getTrackTree().put(filename, currentTree.get(filename));
+                    }
+                } else {
+                    if (targetTree.containsKey(filename)) {
+                        //targetTree v
+                        //currentTree x
+                        newCommit.getTrackTree().put(filename, targetTree.get(filename));
                     }
                 }
             }
         }
+        newCommit.setMessage(currentBranchname, targetBranchname);
+        newCommit.setMerge(currentCommit, targetCommit);
+        newCommit.saveCommit(nowbranch.get());
+        checkoutMerge(nowbranch.get().getName());
 
     }
 
@@ -518,8 +577,12 @@ public class Repository {
         while (commitId != null) {
             treeCommit.put(commitId, i);
             Commit addCommit = Commit.readCommit(commitId);
-            commitId = addCommit.getParent().get(0);
-            i = i + 1;
+            if (addCommit.getParent() != null) {
+                commitId = addCommit.getParent().get(0);
+                i = i + 1;
+            } else {
+                break;
+            }
         }
         return treeCommit;
     }
