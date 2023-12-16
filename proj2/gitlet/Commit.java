@@ -210,7 +210,12 @@ public class Commit implements Serializable, Dumpable {
 //        currentcommit.mess
 //    }
     public void setMerge(Commit currentcommit, Commit targetcommit) {
-        this.parentCommit.clear();
+        if (this.parentCommit == null) {
+            this.parentCommit = new ArrayList<String>();
+        } else {
+            this.parentCommit.clear();
+        }
+
         this.parentCommit.add(currentcommit.commitID);
         this.parentCommit.add(targetcommit.commitID);
         this.timestamp = timestamp();

@@ -435,19 +435,20 @@ public class Repository {
 
         /*Check if there is an untracked file that would be overwritten or deleted */
         if (!Commit.checkAllTracked(currentCommitId, targetCommitId)) {
-            System.out.println("There is an untracked file in the way; " +
-                    "delete it, or add and commit it first.");
+            System.out.println("There is an untracked file in the way; "
+                    + "delete it, or add and commit it first.");
             return;
         }
 
         /*Find the splitCommit*/
         String splitCommitid = findSplit(currentCommitId, targetCommitId);
 
-        if(splitCommitid.equals(currentCommitId)){
+        if (splitCommitid.equals(currentCommitId)) {
+            checkoutBranch(targetBranchname);
             System.out.println("Current branch fast-forwarded.");
             return;
         }
-        if(splitCommitid.equals(targetCommitId)){
+        if (splitCommitid.equals(targetCommitId)) {
             System.out.println("Given branch is an ancestor of the current branch.");
             return;
         }
@@ -484,7 +485,8 @@ public class Repository {
                                 newCommit.getTrackTree().put(filename, currentTree.get(filename));
                             } else {
                                 if (currentTree.get(filename).equals(targetTree.get(filename))) {
-                                    newCommit.getTrackTree().put(filename, currentTree.get(filename));
+                                    newCommit.getTrackTree()
+                                            .put(filename, currentTree.get(filename));
                                 } else {
                                     /*both diff*/
                                     String tblobSHA = targetTree.get(filename);
@@ -494,7 +496,8 @@ public class Repository {
                                     byte[] ccontent = checkoutcBlob.getContent();
                                     byte[] tcontent = checkouttBlob.getContent();
                                     File file = new File(filename);
-                                    writeContents(file, "<<<<<<< HEAD", "\n", ccontent, "=======", "\n", tcontent, ">>>>>>>", "\n");
+                                    writeContents(file, "<<<<<<< HEAD", "\n", ccontent, "=======",
+                                            "\n", tcontent, ">>>>>>>", "\n");
                                     conflict = true;
                                     conflictFiles.add(file);
 
@@ -517,7 +520,8 @@ public class Repository {
                             byte[] ccontent = checkoutcBlob.getContent();
 //                            byte[] tcontent = checkouttBlob.getContent();
                             File file = new File(filename);
-                            writeContents(file, "<<<<<<< HEAD", "\n", ccontent, "=======", "\n", ">>>>>>>", "\n");
+                            writeContents(file, "<<<<<<< HEAD", "\n", ccontent,
+                                    "=======", "\n", ">>>>>>>", "\n");
                             conflict = true;
                             conflictFiles.add(file);
 
@@ -540,7 +544,8 @@ public class Repository {
 //                            byte[] ccontent = checkoutcBlob.getContent();
                             byte[] tcontent = checkouttBlob.getContent();
                             File file = new File(filename);
-                            writeContents(file, "<<<<<<< HEAD", "\n", "=======", "\n", tcontent, ">>>>>>>", "\n");
+                            writeContents(file, "<<<<<<< HEAD", "\n", "=======",
+                                    "\n", tcontent, ">>>>>>>", "\n");
                             conflict = true;
                             conflictFiles.add(file);
 
@@ -569,7 +574,8 @@ public class Repository {
                             byte[] ccontent = checkoutcBlob.getContent();
                             byte[] tcontent = checkouttBlob.getContent();
                             File file = new File(filename);
-                            writeContents(file, "<<<<<<< HEAD", "\n", ccontent, "=======", "\n", tcontent, ">>>>>>>", "\n");
+                            writeContents(file, "<<<<<<< HEAD", "\n", ccontent, "=======",
+                                    "\n", tcontent, ">>>>>>>", "\n");
                             conflict = true;
                             conflictFiles.add(file);
 
@@ -607,7 +613,7 @@ public class Repository {
 
     }
 
-    private String  findSplit(String currentId, String targetId) {
+    private String findSplit(String currentId, String targetId) {
         TreeMap<String, Integer> currentMap = buildCommitMap(currentId);
         TreeMap<String, Integer> targetMap = buildCommitMap(targetId);
         String splitCommit = "";
