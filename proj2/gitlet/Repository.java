@@ -597,6 +597,7 @@ public class Repository {
                 }
             }
         }
+
         newCommit.setMessage(currentBranchname, targetBranchname);
         newCommit.setMerge(currentCommit, targetCommit);
         newCommit.saveCommit(nowbranch.get());
@@ -610,7 +611,6 @@ public class Repository {
 //                add(conflictfile);
 //            }
         }
-
     }
 
     private String findSplit(String currentId, String targetId) {
@@ -630,19 +630,37 @@ public class Repository {
         return splitCommit;
     }
 
+    //    private TreeMap<String, Integer> buildCommitMap(String commitId) {
+//        TreeMap<String, Integer> treeCommit = new TreeMap<>();
+//        int i = 0;
+//        while (commitId != null) {
+//            treeCommit.put(commitId, i);
+//            Commit addCommit = Commit.readCommit(commitId);
+//            if (addCommit.getParent() != null) {
+//                commitId = addCommit.getParent().get(0);
+//                i = i + 1;
+//            } else {
+//                break;
+//            }
+//        }
+//        return treeCommit;
+//    }
     private TreeMap<String, Integer> buildCommitMap(String commitId) {
         TreeMap<String, Integer> treeCommit = new TreeMap<>();
-        int i = 0;
-        while (commitId != null) {
-            treeCommit.put(commitId, i);
-            Commit addCommit = Commit.readCommit(commitId);
-            if (addCommit.getParent() != null) {
-                commitId = addCommit.getParent().get(0);
-                i = i + 1;
-            } else {
-                break;
+        buildCommitMapHelper(commitId, 0, treeCommit);
+        return treeCommit;
+    }
+
+    private void buildCommitMapHelper(String commitId, int i, TreeMap<String, Integer> treeCommit) {
+        if (commitId == null || treeCommit.containsKey(commitId)) {
+            return;
+        }
+        treeCommit.put(commitId, i);
+        Commit addCommit = Commit.readCommit(commitId);
+        if (addCommit.getParent() != null) {
+            for (String parentId : addCommit.getParent()) {
+                buildCommitMapHelper(parentId, i + 1, treeCommit);
             }
         }
-        return treeCommit;
     }
 }
