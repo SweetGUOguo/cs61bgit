@@ -500,7 +500,16 @@ public class Repository {
                         if (splitTree.get(filename).equals(currentTree.get(filename))) {
                             newCommit.getTrackTree().remove(filename);
                         } else {
-                            newCommit.getTrackTree().put(filename, currentTree.get(filename));
+//                            String tblobSHA = targetTree.get(filename);
+                            String cblobSHA = currentTree.get(filename);
+                            Blob checkoutcBlob = Blob.readBlob(cblobSHA);
+//                            Blob checkouttBlob = Blob.readBlob(tblobSHA);
+                            byte[] ccontent = checkoutcBlob.getContent();
+//                            byte[] tcontent = checkouttBlob.getContent();
+                            File file = new File(filename);
+                            writeContents(file, "<<<<<<< HEAD", "\n", ccontent, "=======", "\n", ">>>>>>>");
+                            conflict = true;
+                            conflictFiles.add(file);
                         }
                     }
                 } else {
@@ -510,7 +519,16 @@ public class Repository {
                         if (splitTree.get(filename).equals(targetTree.get(filename))) {
                             newCommit.getTrackTree().remove(filename);
                         } else {
-                            newCommit.getTrackTree().put(filename, targetTree.get(filename));
+                            String tblobSHA = targetTree.get(filename);
+//                            String cblobSHA = currentTree.get(filename);
+//                            Blob checkoutcBlob = Blob.readBlob(cblobSHA);
+                            Blob checkouttBlob = Blob.readBlob(tblobSHA);
+//                            byte[] ccontent = checkoutcBlob.getContent();
+                            byte[] tcontent = checkouttBlob.getContent();
+                            File file = new File(filename);
+                            writeContents(file, "<<<<<<< HEAD", "\n", "=======", "\n", tcontent, ">>>>>>>");
+                            conflict = true;
+                            conflictFiles.add(file);
                         }
 
                     } else {
