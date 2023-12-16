@@ -30,7 +30,7 @@ public class MyUtils {
         writeObject(outFile, classobject);
     }
 
-    private static String makeSha2DIR(String sha) {
+    public static String makeSha2DIR(String sha) {
         String shaDirname = sha.substring(0, 2);
         return shaDirname;
     }

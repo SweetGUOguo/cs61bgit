@@ -128,10 +128,28 @@ public class Repository {
             System.out.println("File does not exist in that commit.");
         }
     }
+    public String getrightSha(String sha){
+        String allsha = new String();
+        String shadir = makeSha2DIR(sha);
+        File dir = join(OBJECTS_DIR,shadir);
+        List<String> files = traverseFolder(dir);
+        for(String filename:files){
+            File file = new File(filename);
+            filename = file.getName();
+            String allname = shadir+filename;
+            if(allname.contains(sha)){
+                allsha = allname;
+            }
+        }
+        return allsha;
+    }
 
     public void checkout(String sha, File file) {
         String fileName = file.getPath();
 //        File shaFile = join(OBJECTS_DIR, sha);
+        if(sha.length()<16){
+            sha = getrightSha(sha);
+        }
         File shaFile = getObjectfileById(sha);
         if (MyUtils.ifObjectisCommit(shaFile)) {
             Commit checkoutCommit = Commit.readCommit(sha);
