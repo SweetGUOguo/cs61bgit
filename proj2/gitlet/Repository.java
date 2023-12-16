@@ -484,7 +484,7 @@ public class Repository {
                                     byte[] ccontent = checkoutcBlob.getContent();
                                     byte[] tcontent = checkouttBlob.getContent();
                                     File file = new File(filename);
-                                    writeContents(file, "<<<<<<< HEAD", "\n", ccontent, "=======", "\n", tcontent, ">>>>>>>");
+                                    writeContents(file, "<<<<<<< HEAD", "\n", ccontent, "=======", "\n", tcontent, ">>>>>>>", "\n");
                                     conflict = true;
                                     conflictFiles.add(file);
 
@@ -507,7 +507,7 @@ public class Repository {
                             byte[] ccontent = checkoutcBlob.getContent();
 //                            byte[] tcontent = checkouttBlob.getContent();
                             File file = new File(filename);
-                            writeContents(file, "<<<<<<< HEAD", "\n", ccontent, "=======", "\n", ">>>>>>>");
+                            writeContents(file, "<<<<<<< HEAD", "\n", ccontent, "=======", "\n", ">>>>>>>", "\n");
                             conflict = true;
                             conflictFiles.add(file);
                         }
@@ -526,7 +526,7 @@ public class Repository {
 //                            byte[] ccontent = checkoutcBlob.getContent();
                             byte[] tcontent = checkouttBlob.getContent();
                             File file = new File(filename);
-                            writeContents(file, "<<<<<<< HEAD", "\n", "=======", "\n", tcontent, ">>>>>>>");
+                            writeContents(file, "<<<<<<< HEAD", "\n", "=======", "\n", tcontent, ">>>>>>>", "\n");
                             conflict = true;
                             conflictFiles.add(file);
                         }
@@ -551,7 +551,7 @@ public class Repository {
                             byte[] ccontent = checkoutcBlob.getContent();
                             byte[] tcontent = checkouttBlob.getContent();
                             File file = new File(filename);
-                            writeContents(file, "<<<<<<< HEAD", "\n", ccontent, "=======", "\n", tcontent, ">>>>>>>");
+                            writeContents(file, "<<<<<<< HEAD", "\n", ccontent, "=======", "\n", tcontent, ">>>>>>>", "\n");
                             conflict = true;
                             conflictFiles.add(file);
 
