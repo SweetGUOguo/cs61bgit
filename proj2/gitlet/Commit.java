@@ -152,12 +152,12 @@ public class Commit implements Serializable, Dumpable {
         TreeMap<String, String> fileTrackTree = checkoutCommit.getTrackTree();
         for (String filename : fileTrackTree.keySet()) {
             File file = new File(filename);
-            if (!conflictFiles.contains(file)) {
-                String blobSHA = fileTrackTree.get(filename);
-                Blob checkoutBlob = Blob.readBlob(blobSHA);
-                byte[] content = checkoutBlob.getContent();
-                writeContents(file, content);
-            }
+//            if (!conflictFiles.contains(file)) {
+            String blobSHA = fileTrackTree.get(filename);
+            Blob checkoutBlob = Blob.readBlob(blobSHA);
+            byte[] content = checkoutBlob.getContent();
+            writeContents(file, content);
+//            }
         }
     }
 

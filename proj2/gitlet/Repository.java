@@ -488,9 +488,9 @@ public class Repository {
                                     conflict = true;
                                     conflictFiles.add(file);
 
-//                                    Blob addblob = new Blob(file);
-//                                    addblob.saveblob();
-//                                    newCommit.getTrackTree().put(filename, addblob.getRefs());
+                                    Blob addblob = new Blob(file);
+                                    addblob.saveblob();
+                                    newCommit.getTrackTree().put(filename, addblob.getRefs());
                                 }
                             }
                         }
@@ -510,6 +510,10 @@ public class Repository {
                             writeContents(file, "<<<<<<< HEAD", "\n", ccontent, "=======", "\n", ">>>>>>>", "\n");
                             conflict = true;
                             conflictFiles.add(file);
+
+                            Blob addblob = new Blob(file);
+                            addblob.saveblob();
+                            newCommit.getTrackTree().put(filename, addblob.getRefs());
                         }
                     }
                 } else {
@@ -529,6 +533,10 @@ public class Repository {
                             writeContents(file, "<<<<<<< HEAD", "\n", "=======", "\n", tcontent, ">>>>>>>", "\n");
                             conflict = true;
                             conflictFiles.add(file);
+
+                            Blob addblob = new Blob(file);
+                            addblob.saveblob();
+                            newCommit.getTrackTree().put(filename, addblob.getRefs());
                         }
 
                     } else {
@@ -555,9 +563,9 @@ public class Repository {
                             conflict = true;
                             conflictFiles.add(file);
 
-//                            Blob addblob = new Blob(file);
-//                            addblob.saveblob();
-//                            newCommit.getTrackTree().put(filename, addblob.getRefs());
+                            Blob addblob = new Blob(file);
+                            addblob.saveblob();
+                            newCommit.getTrackTree().put(filename, addblob.getRefs());
                         }
                     } else {
                         //targetTree x
@@ -580,9 +588,9 @@ public class Repository {
 
         if (conflict) {
             System.out.println("Encountered a merge conflict.");
-            for (File conflictfile : conflictFiles) {
-                add(conflictfile);
-            }
+//            for (File conflictfile : conflictFiles) {
+//                add(conflictfile);
+//            }
         }
 
     }
