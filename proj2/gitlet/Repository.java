@@ -5,6 +5,7 @@ import java.io.File;
 import static gitlet.Utils.*;
 import static gitlet.MyUtils.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeMap;
@@ -174,7 +175,7 @@ public class Repository {
         }
     }
 
-    public void checkoutMerge(String branchName) {
+    public void checkoutMerge(String branchName, List<File> conflictFiles) {
         File branch = join(GITLET_DIR, branchName);
         if (branch.exists()) {
             String headBranchname = readContentsAsString(HEAD);
@@ -183,7 +184,7 @@ public class Repository {
 
             String checkoutId = readContentsAsString(branch);
             if (Commit.checkAllTracked(headBcommitId, checkoutId)) {
-                Commit.checkoutAll(checkoutId);
+                Commit.checkoutAllexp(checkoutId, conflictFiles);
                 Commit.deleteDiftxt(headBcommitId, checkoutId);
                 writeContents(HEAD, branchName);
                 stagingArea.get().clear();
@@ -454,6 +455,9 @@ public class Repository {
         allTree.putAll(currentTree);
         allTree.putAll(targetTree);
 
+        boolean conflict = false;
+        List<File> conflictFiles = new ArrayList<File>();
+
         for (String filename : allTree.keySet()) {
             if (splitTree.containsKey(filename)) {
                 if (currentTree.containsKey(filename)) {
@@ -480,11 +484,13 @@ public class Repository {
                                     byte[] ccontent = checkoutcBlob.getContent();
                                     byte[] tcontent = checkouttBlob.getContent();
                                     File file = new File(filename);
-                                    writeContents(file, "<<<<<<< HEAD", '\n', ccontent, "=======", '\n', tcontent, "\n", ">>>>>>>");
+                                    writeContents(file, "<<<<<<< HEAD", "\n", ccontent, "=======", "\n", tcontent, ">>>>>>>");
+                                    conflict = true;
+                                    conflictFiles.add(file);
 
-                                    Blob addblob = new Blob(file);
-                                    addblob.saveblob();
-                                    newCommit.getTrackTree().put(filename, addblob.getRefs());
+//                                    Blob addblob = new Blob(file);
+//                                    addblob.saveblob();
+//                                    newCommit.getTrackTree().put(filename, addblob.getRefs());
                                 }
                             }
                         }
@@ -515,7 +521,6 @@ public class Repository {
                 if (currentTree.containsKey(filename)) {
                     /*two contains*/
                     if (targetTree.containsKey(filename)) {
-                        //对比文件内容
                         //targetTree v
                         //currentTree v
                         if (currentTree.get(filename).equals(targetTree.get(filename))) {
@@ -528,11 +533,13 @@ public class Repository {
                             byte[] ccontent = checkoutcBlob.getContent();
                             byte[] tcontent = checkouttBlob.getContent();
                             File file = new File(filename);
-                            writeContents(file, "<<<<<<< HEAD", "\n", ccontent, "=======", "\n", tcontent, "\n", ">>>>>>>");
+                            writeContents(file, "<<<<<<< HEAD", "\n", ccontent, "=======", "\n", tcontent, ">>>>>>>");
+                            conflict = true;
+                            conflictFiles.add(file);
 
-                            Blob addblob = new Blob(file);
-                            addblob.saveblob();
-                            newCommit.getTrackTree().put(filename, addblob.getRefs());
+//                            Blob addblob = new Blob(file);
+//                            addblob.saveblob();
+//                            newCommit.getTrackTree().put(filename, addblob.getRefs());
                         }
                     } else {
                         //targetTree x
@@ -551,7 +558,14 @@ public class Repository {
         newCommit.setMessage(currentBranchname, targetBranchname);
         newCommit.setMerge(currentCommit, targetCommit);
         newCommit.saveCommit(nowbranch.get());
-        checkoutMerge(nowbranch.get().getName());
+        checkoutMerge(nowbranch.get().getName(), conflictFiles);
+
+        if (conflict) {
+            System.out.println("Encountered a merge conflict.");
+            for (File conflictfile : conflictFiles) {
+                add(conflictfile);
+            }
+        }
 
     }
 

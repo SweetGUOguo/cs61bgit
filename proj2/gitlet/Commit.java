@@ -145,6 +145,22 @@ public class Commit implements Serializable, Dumpable {
         }
     }
 
+    /*checkoutexp(copy) all the files in the branchCommit
+     * to the working DIR*/
+    public static void checkoutAllexp(String checkoutId, List<File> conflictFiles) {
+        Commit checkoutCommit = readCommit(checkoutId);
+        TreeMap<String, String> fileTrackTree = checkoutCommit.getTrackTree();
+        for (String filename : fileTrackTree.keySet()) {
+            File file = new File(filename);
+            if (!conflictFiles.contains(file)) {
+                String blobSHA = fileTrackTree.get(filename);
+                Blob checkoutBlob = Blob.readBlob(blobSHA);
+                byte[] content = checkoutBlob.getContent();
+                writeContents(file, content);
+            }
+        }
+    }
+
     /*delete all the files in working DIR
      * which are not in the branchCommit
      * but are in the currentCommit*/
