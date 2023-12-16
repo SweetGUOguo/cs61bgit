@@ -175,17 +175,17 @@ public class Repository {
         }
     }
 
-    public void checkoutMerge(String branchName, List<File> conflictFiles) {
+    public void checkoutMerge(String branchName, String currentCommitid, List<File> conflictFiles) {
         File branch = join(GITLET_DIR, branchName);
         if (branch.exists()) {
-            String headBranchname = readContentsAsString(HEAD);
-            File headBranch = join(GITLET_DIR, headBranchname);
-            String headBcommitId = readContentsAsString(headBranch);
+//            String headBranchname = readContentsAsString(HEAD);
+//            File headBranch = join(GITLET_DIR, headBranchname);
+//            String headBcommitId = currentCommitid;
 
             String checkoutId = readContentsAsString(branch);
-            if (Commit.checkAllTracked(headBcommitId, checkoutId)) {
+            if (Commit.checkAllTracked(currentCommitid, checkoutId)) {
                 Commit.checkoutAllexp(checkoutId, conflictFiles);
-                Commit.deleteDiftxt(headBcommitId, checkoutId);
+                Commit.deleteDiftxt(currentCommitid, checkoutId);
                 writeContents(HEAD, branchName);
                 stagingArea.get().clear();
                 stagingArea.get().save();
@@ -442,6 +442,16 @@ public class Repository {
 
         /*Find the splitCommit*/
         String splitCommitid = findSplit(currentCommitId, targetCommitId);
+
+        if(splitCommitid.equals(currentCommitId)){
+            System.out.println("Current branch fast-forwarded.");
+            return;
+        }
+        if(splitCommitid.equals(targetCommitId)){
+            System.out.println("Given branch is an ancestor of the current branch.");
+            return;
+        }
+
         Commit splitCommit = Commit.readCommit(splitCommitid);
         Commit currentCommit = Commit.readCommit(currentCommitId);
         Commit targetCommit = Commit.readCommit(targetCommitId);
@@ -584,7 +594,9 @@ public class Repository {
         newCommit.setMessage(currentBranchname, targetBranchname);
         newCommit.setMerge(currentCommit, targetCommit);
         newCommit.saveCommit(nowbranch.get());
-        checkoutMerge(nowbranch.get().getName(), conflictFiles);
+        stagingArea.get().setTrackedTree();
+
+        checkoutMerge(nowbranch.get().getName(), currentCommitId, conflictFiles);
 
         if (conflict) {
             System.out.println("Encountered a merge conflict.");
@@ -595,7 +607,7 @@ public class Repository {
 
     }
 
-    private String findSplit(String currentId, String targetId) {
+    private String  findSplit(String currentId, String targetId) {
         TreeMap<String, Integer> currentMap = buildCommitMap(currentId);
         TreeMap<String, Integer> targetMap = buildCommitMap(targetId);
         String splitCommit = "";

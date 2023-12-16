@@ -157,6 +157,10 @@ public class Commit implements Serializable, Dumpable {
             Blob checkoutBlob = Blob.readBlob(blobSHA);
             byte[] content = checkoutBlob.getContent();
             writeContents(file, content);
+//            if(file.exists()){
+//                int i = 1;
+//                i = i+1;
+//            }
 //            }
         }
     }
